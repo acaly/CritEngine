@@ -9,9 +9,9 @@ import org.lwjgl.input.Keyboard;
 import cn.weathfold.critengine.util.GenericUtils;
 
 /**
- * ²Ù×÷¿ØÖÆµÄ×ÜÏß¡£
- * ¿Í»§¶Ë³ÌĞòÓ¦¸ÃÏòÕâÀï×¢²á¼üÎ»ºÅ¼°ÆäÓ³Éäµ½µÄ¼üÅÌ/Êó±êID¡£
- * Êµ¼ÊµÄÕìÌı²Ù×÷Ö÷ÒªÍ¨¹ı¶Ô´ËÀàµÄ²éÑ¯À´½øĞĞ¡£
+ * æ“ä½œæ§åˆ¶çš„æ€»çº¿ã€‚
+ * å®¢æˆ·ç«¯ç¨‹åºåº”è¯¥å‘è¿™é‡Œæ³¨å†Œé”®ä½å·åŠå…¶æ˜ å°„åˆ°çš„é”®ç›˜/é¼ æ ‡IDã€‚
+ * å®é™…çš„ä¾¦å¬æ“ä½œä¸»è¦é€šè¿‡å¯¹æ­¤ç±»çš„æŸ¥è¯¢æ¥è¿›è¡Œã€‚
  */
 public class InputHandler {
 	
@@ -55,7 +55,7 @@ public class InputHandler {
 	}
 	
 	/**
-	 * ÅĞ¶ÏÄ³¸ö¼üÊÇ·ñ±»°´ÏÂ¡£
+	 * åˆ¤æ–­æŸä¸ªé”®æ˜¯å¦è¢«æŒ‰ä¸‹ã€‚
 	 */
 	public static boolean isKeyDown(int subKey) {
 		return GenericUtils.searchByValue(statsMap, new KeyStatus(subKey)).getValue().isDown;

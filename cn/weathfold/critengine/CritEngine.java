@@ -9,19 +9,19 @@ import org.lwjgl.opengl.Display;
 import cn.weathfold.critengine.scene.Scene;
 
 /**
- * ÒıÇæµÄµ÷ÓÃÈë¿Ú¡£½øĞĞ´°ÌåµÄ´´½¨ºÍÏûÏ¢Ñ­»·µÄ½Ó¹Ü
+ * å¼•æ“çš„è°ƒç”¨å…¥å£ã€‚è¿›è¡Œçª—ä½“çš„åˆ›å»ºå’Œæ¶ˆæ¯å¾ªç¯çš„æ¥ç®¡
  * @author WeAthFolD
  */
 public class CritEngine {
 	
-	private static Scene currentScene = null; //µ±Ç°´°ÌåµÄScene
+	private static Scene currentScene = null; //å½“å‰çª—ä½“çš„Scene
 	private static GameTimer timer;
 	private static float aspectRatio = 1.0F;
 	
 	/**
-	 * ÒÔÄ³Ò»Scene³õÊ¼»¯´°Ìå£¬²¢¿ªÊ¼ÓÎÏ·Ñ­»·¡£
-	 * ¿Í»§¶Ë³ÌĞòÔ±ÓĞÔğÈÎÉèÖÃºÃDisplayµÄÆäËûÊôĞÔ¡£
-	 * @param dm ÏÔÊ¾Ä£Ê½
+	 * ä»¥æŸä¸€Sceneåˆå§‹åŒ–çª—ä½“ï¼Œå¹¶å¼€å§‹æ¸¸æˆå¾ªç¯ã€‚
+	 * å®¢æˆ·ç«¯ç¨‹åºå‘˜æœ‰è´£ä»»è®¾ç½®å¥½Displayçš„å…¶ä»–å±æ€§ã€‚
+	 * @param dm æ˜¾ç¤ºæ¨¡å¼
 	 * @param sc
 	 */
 	public static void start(Scene sc) {
@@ -51,14 +51,14 @@ public class CritEngine {
 	}
 	
 	/**
-	 * »ñÈ¡È«¾ÖµÄĞéÄâÊ±¼ä
+	 * è·å–å…¨å±€çš„è™šæ‹Ÿæ—¶é—´
 	 */
 	public static long getVirtualTime() {
 		return timer.getTime();
 	}
 	
 	/**
-	 * »ñÈ¡È«¾Ö¼ÆÊ±Æ÷
+	 * è·å–å…¨å±€è®¡æ—¶å™¨
 	 * @return
 	 */
 	public static GameTimer getTimer() {
@@ -66,7 +66,7 @@ public class CritEngine {
 	}
 	
 	/**
-	 * ÇĞ»»³¡¾°
+	 * åˆ‡æ¢åœºæ™¯
 	 * @param another
 	 * @return
 	 */
@@ -78,7 +78,7 @@ public class CritEngine {
 	}
 
 	/**
-	 * »ñÈ¡µ±Ç°µÄ³¡¾°
+	 * è·å–å½“å‰çš„åœºæ™¯
 	 * @return
 	 */
 	public static Scene getCurrentScene() {
@@ -86,7 +86,7 @@ public class CritEngine {
 	}
 	
 	/**
-	 * Ã¿Ö¡¸üĞÂ¡£
+	 * æ¯å¸§æ›´æ–°ã€‚
 	 */
 	private static void updateCycle() {
 		

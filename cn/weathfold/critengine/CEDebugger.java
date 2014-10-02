@@ -4,7 +4,7 @@
 package cn.weathfold.critengine;
 
 /**
- * @author FolD
+ * @author WeAthFolD
  *
  */
 public class CEDebugger {

@@ -6,13 +6,13 @@ import cn.weathfold.critengine.util.Rect;
 public class Camera {
 	
 	/**
-	 * ¾µÍ·´óĞ¡µÄ¶ÔÆë·½Ê½£¨width²»±ä or height²»±ä£©
+	 * é•œå¤´å¤§å°çš„å¯¹é½æ–¹å¼ï¼ˆwidthä¸å˜ or heightä¸å˜ï¼‰
 	 */
 	public enum Alignment {
 		NONE, ALIGN_WIDTH, ALIGN_HEIGHT
 	};
 	
-	protected Rect camRect; //Ïà»úÇøÓò
+	protected Rect camRect; //ç›¸æœºåŒºåŸŸ
 	protected Alignment align;
 	
 	public Camera(double x, double y, double width, double height, Alignment align) {

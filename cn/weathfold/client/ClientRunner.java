@@ -12,7 +12,7 @@ import cn.weathfold.critengine.scene.GUIScene;
 import cn.weathfold.critengine.scene.Scene;
 
 /**
- * 用于测试的客户端启动~
+ * 鐢ㄤ簬娴嬭瘯鐨勫鎴风鍚姩~
  * @author WeAthFolD
  *
  */

@@ -8,18 +8,18 @@ import java.util.Set;
 import cn.weathfold.critengine.entity.Entity;
 
 /**
- * ³¡¾°£¬ÊÇCEÒ»ÇĞÓÎÏ·»úÖÆËùÒÀ¸½µÄ»ù´¡¡£
+ * åœºæ™¯ï¼Œæ˜¯CEä¸€åˆ‡æ¸¸æˆæœºåˆ¶æ‰€ä¾é™„çš„åŸºç¡€ã€‚
  * @author WeAthFolD
  */
 public abstract class Scene {
 	
 	/**
-	 * »ñÈ¡ÔÚ³¡¾°ÖĞ»îÔ¾µÄËùÓĞEntity¡£
+	 * è·å–åœ¨åœºæ™¯ä¸­æ´»è·ƒçš„æ‰€æœ‰Entityã€‚
 	 */
 	public abstract Set<Entity> getSceneEntities();
 	
 	/**
-	 * »æÖÆ³¡¾°£¬Í¨³£ÊÇ±³¾°µÈºó²ãÄÚÈİ¡£ÍÆ¼ö·¶Î§£º(0, 0)->(1, 1)ÌîÂú
+	 * ç»˜åˆ¶åœºæ™¯ï¼Œé€šå¸¸æ˜¯èƒŒæ™¯ç­‰åå±‚å†…å®¹ã€‚æ¨èèŒƒå›´ï¼š(0, 0)->(1, 1)å¡«æ»¡
 	 */
 	public abstract void renderScene();
 	

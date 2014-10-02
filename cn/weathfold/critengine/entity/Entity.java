@@ -4,18 +4,18 @@ import cn.weathfold.critengine.physics.CollideProperty;
 import cn.weathfold.critengine.util.Vector2d;
 
 /**
- * EntityÔÚSceneÖĞ±»×¢²á²¢ÇÒµ÷ÓÃ£¬Ö´ĞĞµÄÊÇ¡°Ò»¸öÓÎÏ·¶ÔÏó¡±²ã´ÎµÄĞĞÎª¡£
+ * Entityåœ¨Sceneä¸­è¢«æ³¨å†Œå¹¶ä¸”è°ƒç”¨ï¼Œæ‰§è¡Œçš„æ˜¯â€œä¸€ä¸ªæ¸¸æˆå¯¹è±¡â€å±‚æ¬¡çš„è¡Œä¸ºã€‚
  * @author WeAthFolD
  */
 public abstract class Entity {
 	
-	/* Î»ÖÃ */
+	/* ä½ç½® */
 	public Vector2d pos;
 	
-	/* ÊÇ·ñÎª¸ÃÊµÌå´ò¿ªÎïÀí¼ÆËã£¨ËÙ¶È/Î»ÖÃ¸üĞÂ£¬ÖØÁ¦¼ÓËÙ¶È£© */
+	/* æ˜¯å¦ä¸ºè¯¥å®ä½“æ‰“å¼€ç‰©ç†è®¡ç®—ï¼ˆé€Ÿåº¦/ä½ç½®æ›´æ–°ï¼Œé‡åŠ›åŠ é€Ÿåº¦ï¼‰ */
 	public boolean enablePhys = false;
 	
-	/* Åö×²ÊôĞÔ¡£ ³õÊ¼»¯Õâ¸öÓòÈÃÊµÌå¿ÉÅö×² */
+	/* ç¢°æ’å±æ€§ã€‚ åˆå§‹åŒ–è¿™ä¸ªåŸŸè®©å®ä½“å¯ç¢°æ’ */
 	public CollideProperty collideProp = null;
 	
 	public Entity(double x, double y) {
@@ -28,14 +28,14 @@ public abstract class Entity {
 	}
 	
 	/**
-	 * Ö¡¸üĞÂÊ±±»Í¬²½µ÷ÓÃµÄº¯Êı¡£
+	 * å¸§æ›´æ–°æ—¶è¢«åŒæ­¥è°ƒç”¨çš„å‡½æ•°ã€‚
 	 */
 	public void onFrameUpdate() {
 		
 	}
 
 	/**
-	 * ¿Í»§¶Ë»æÖÆº¯Êı¡££¨ÍÆ¼ö£©»æÖÆÔÚ(0, 0, 0) -> (width, height, 0)ÇøÓò¡£
+	 * å®¢æˆ·ç«¯ç»˜åˆ¶å‡½æ•°ã€‚ï¼ˆæ¨èï¼‰ç»˜åˆ¶åœ¨(0, 0, 0) -> (width, height, 0)åŒºåŸŸã€‚
 	 */
 	public void drawEntity() {
 		

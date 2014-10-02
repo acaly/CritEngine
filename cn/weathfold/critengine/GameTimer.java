@@ -4,7 +4,7 @@
 package cn.weathfold.critengine;
 
 /**
- * Ê±¼äÏµÍ³µÄ¼òµ¥·â×°£¬ÔÊĞíÔÚÍ¨¹ıÏµÍ³Ê±¼ä»ñÈ¡µÄ»ù´¡ÉÏ½øĞĞÊ±¼äµÄÔİÍ£²Ù×÷¡£
+ * æ—¶é—´ç³»ç»Ÿçš„ç®€å•å°è£…ï¼Œå…è®¸åœ¨é€šè¿‡ç³»ç»Ÿæ—¶é—´è·å–çš„åŸºç¡€ä¸Šè¿›è¡Œæ—¶é—´çš„æš‚åœæ“ä½œã€‚
  * @author WeAthFolD
  *
  */
@@ -13,7 +13,7 @@ public class GameTimer {
 	private long virtualTime = 0L;
 	
 	private boolean paused;
-	private long deltaTime; //ĞéÄâÊ±¼äºÍÏµÍ³Ê±¼äµÄ²îÖµ
+	private long deltaTime; //è™šæ‹Ÿæ—¶é—´å’Œç³»ç»Ÿæ—¶é—´çš„å·®å€¼
 	private long lastSystemTime;
 	
 	public GameTimer() {

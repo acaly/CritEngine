@@ -4,15 +4,15 @@
 package cn.weathfold.critengine.util;
 
 /**
- * ÃèÊö³¡¾°ÖĞÒ»¿éÕı½»¾ØĞÎÇøÓòµÄÀà¡£
+ * æè¿°åœºæ™¯ä¸­ä¸€å—æ­£äº¤çŸ©å½¢åŒºåŸŸçš„ç±»ã€‚
  * @author WeAthFolD
  */
 public class Rect {
 	
-	/* Î»ÖÃ×ø±ê */
+	/* ä½ç½®åæ ‡ */
 	public Vector2d pos;
 	
-	/* ³¤¿í */
+	/* é•¿å®½ */
 	public double width, height;
 	
 	public Rect(double x, double y, double w, double h) {
@@ -22,8 +22,8 @@ public class Rect {
 	}
 	
 	/**
-	 * ÅĞ¶ÏÄ³Á½¸öÇøÓòÊÇ·ñÏà½»¡£
-	 * @param r2 ÁíÍâÒ»¸öRect
+	 * åˆ¤æ–­æŸä¸¤ä¸ªåŒºåŸŸæ˜¯å¦ç›¸äº¤ã€‚
+	 * @param r2 å¦å¤–ä¸€ä¸ªRect
 	 */
 	public boolean intersects(Rect r2) {
 		return ins(getMinX(), getMaxX(), r2.getMinX(), r2.getMaxX())
@@ -31,7 +31,7 @@ public class Rect {
 	}
 	
 	/**
-	 * ÅĞ¶ÏÒ»Î¬Ïß¶Î[a, b], [c, d]ÊÇ·ñÓĞ½»¼¯
+	 * åˆ¤æ–­ä¸€ç»´çº¿æ®µ[a, b], [c, d]æ˜¯å¦æœ‰äº¤é›†
 	 */
 	private boolean ins(double a, double b, double c, double d) {
 		return (c <= a && d > a) || (c < b);
