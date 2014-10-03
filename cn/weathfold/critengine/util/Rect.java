@@ -21,6 +21,11 @@ public class Rect {
 		this.height = h;
 	}
 	
+	public void addPosition(double x, double y) {
+		pos.x += x;
+		pos.y += y;
+	}
+	
 	/**
 	 * 判断某两个区域是否相交。
 	 * @param r2 另外一个Rect

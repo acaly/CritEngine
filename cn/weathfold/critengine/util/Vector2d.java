@@ -21,5 +21,10 @@ public class Vector2d {
 		double z = Math.sqrt(x * x + y * y);
 		return new Vector2d(x / z, y / z);
 	}
+	
+	public void addVector(double x, double y) {
+		this.x += x;
+		this.y += y;
+	}
 
 }

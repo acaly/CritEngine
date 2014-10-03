@@ -3,6 +3,8 @@
  */
 package cn.weathfold.critengine;
 
+import org.lwjgl.Sys;
+
 /**
  * 时间系统的简单封装，允许在通过系统时间获取的基础上进行时间的暂停操作。
  * @author WeAthFolD
@@ -15,18 +17,25 @@ public class GameTimer {
 	private boolean paused;
 	private long deltaTime; //虚拟时间和系统时间的差值
 	private long lastSystemTime;
+	private long elapsedTime;
 	
 	public GameTimer() {
 		updateTime();
 	}
 	
+	public long getElapsedTime() {
+		return elapsedTime;
+	}
+	
 	public void updateTime() {
-		long rt = System.currentTimeMillis();
+		long rt = (Sys.getTime() * 1000) / Sys.getTimerResolution();
 		if(!paused) {
 			virtualTime = rt - deltaTime;
 		} else {
 			deltaTime += rt - lastSystemTime;
 		}
+		//System.out.println("Virtual time " + virtualTime);
+		elapsedTime = rt - lastSystemTime;
 		lastSystemTime = rt;
 	}
 	

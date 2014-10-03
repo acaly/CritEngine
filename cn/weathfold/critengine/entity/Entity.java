@@ -1,6 +1,7 @@
 package cn.weathfold.critengine.entity;
 
 import cn.weathfold.critengine.physics.CollideProperty;
+import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.critengine.util.Vector2d;
 
 /**
@@ -10,7 +11,7 @@ import cn.weathfold.critengine.util.Vector2d;
 public abstract class Entity {
 	
 	/* 位置 */
-	public Vector2d pos;
+	public Rect geomProps;
 	
 	/* 是否为该实体打开物理计算（速度/位置更新，重力加速度） */
 	public boolean enablePhys = false;
@@ -18,8 +19,15 @@ public abstract class Entity {
 	/* 碰撞属性。 初始化这个域让实体可碰撞 */
 	public CollideProperty collideProp = null;
 	
+	/* 用来处理同优先级渲染的问题 */
+	public double zlevel = -1;
+	
 	public Entity(double x, double y) {
-		pos = new Vector2d(x, y);
+		geomProps = new Rect(x, y, 0, 0);
+	}
+	
+	public Entity(double x, double y, double width, double height) {
+		geomProps = new Rect(x, y, width, height);
 	}
 	
 	public Entity setEnablePhysics(boolean b) {
@@ -39,5 +47,9 @@ public abstract class Entity {
 	 */
 	public void drawEntity() {
 		
+	}
+	
+	public int getRenderPriority() {
+		return 1;
 	}
 }
