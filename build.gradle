@@ -32,9 +32,27 @@ compileJava.options.encoding = 'UTF-8'
 
 mainClassName = 'cn.weathfold.client.ClientRunner'
 
-task runWindows << {
-    systemProperty "java.library.path", "$buildDir/natives-windows"
+import org.apache.tools.ant.taskdefs.condition.Os
+
+run {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        println "Running test client on windows."
+        systemProperty "java.library.path", "$buildDir/natives-windows"
+    } else if (Os.isFamily(Os.FAMILY_MAC)) {
+        println "Running test client on osx."
+        systemProperty "java.library.path", "$buildDir/natives-osc"
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        println "Running test client on linux."
+        systemProperty "java.library.path", "$buildDir/natives-linux"
+    }
     args 'test'
+}
+
+task runWindows << {
+    platform = 'windows'
+    run {
+        platform 'windows'
+    }
 }
 
 task runLinux << {
