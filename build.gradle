@@ -34,25 +34,38 @@ mainClassName = 'cn.weathfold.client.ClientRunner'
 
 run {
     systemProperty "java.library.path", "$buildDir/natives-windows"
+    args 'test'
 }
 
 task setupWindows << {
     build
     windowsNatives
     eclipse
-    run
 }
 
 task setupLinux << {
     build
     linuxNatives
     eclipse
-    run
 }
 
 task setupOsx << {
     build
     osxNatives
     eclipse
+}
+
+task runWindows << {
+    setupWindows
+    run
+}
+
+task runLinux << {
+    setupLinux
+    run
+}
+
+task runOsx << {
+    setupOsx
     run
 }
