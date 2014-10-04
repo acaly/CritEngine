@@ -10,6 +10,7 @@ dependencies{
 	compile group: 'org.lwjgl.lwjgl', name: 'lwjgl', version: '2.8.4'
 	compile group: 'org.l33tlabs.twl', name: 'pngdecoder', version: '1.0'
 }
+
 compileJava.options.encoding = 'UTF-8'
 
 ['windows', 'linux', 'osx'].each { platform ->
@@ -30,3 +31,28 @@ compileJava.options.encoding = 'UTF-8'
 }
 
 mainClassName = 'cn.weathfold.client.ClientRunner'
+
+run {
+    systemProperty "java.library.path", "$buildDir/natives-windows"
+}
+
+task setupWindows << {
+    build
+    windowsNatives
+    eclipse
+    run
+}
+
+task setupLinux << {
+    build
+    linuxNatives
+    eclipse
+    run
+}
+
+task setupOsx << {
+    build
+    osxNatives
+    eclipse
+    run
+}
