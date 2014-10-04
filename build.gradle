@@ -45,7 +45,7 @@ run {
     } else if (Os.isFamily(Os.FAMILY_UNIX)) {
         println "Running test client on linux."
         println "Default lib path: ${System.getenv('LD_LIBRARY_PATH')}"
-        systemProperty "java.library.path", "$buildDir/natives-linux;${System.getenv('LD_LIBRARY_PATH')}"
+        systemProperty "java.library.path", "$buildDir/natives-linux:${System.getenv('LD_LIBRARY_PATH')}"
     }
     args 'test'
 }
