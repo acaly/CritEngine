@@ -1,8 +1,0 @@
-language: java
-
-before_script:
-
-script:
-- rm gradlew
-- rm gradlew.bat
-- gradle build linuxNatives eclipse
