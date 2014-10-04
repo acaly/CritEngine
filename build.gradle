@@ -43,25 +43,8 @@ run {
         systemProperty "java.library.path", "$buildDir/natives-osc"
     } else if (Os.isFamily(Os.FAMILY_UNIX)) {
         println "Running test client on linux."
-        systemProperty "java.library.path", "$buildDir/natives-linux"
+        systemProperty "java.library.path", "$buildDir/natives-linux;${System.getenv('LD_LIBRARY_PATH')}"
     }
-    args 'test'
-}
-
-task runWindows << {
-    platform = 'windows'
-    run {
-        platform 'windows'
-    }
-}
-
-task runLinux << {
-    systemProperty "java.library.path", "$buildDir/natives-linux"
-    args 'test'
-}
-
-task runOsx << {
-    systemProperty "java.library.path", "$buildDir/natives-osx"
     args 'test'
 }
 
