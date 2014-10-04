@@ -54,18 +54,3 @@ task setupOsx << {
     osxNatives
     eclipse
 }
-
-task runWindows << {
-    setupWindows
-    run
-}
-
-task runLinux << {
-    setupLinux
-    run
-}
-
-task runOsx << {
-    setupOsx
-    run
-}
