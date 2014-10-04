@@ -32,17 +32,17 @@ compileJava.options.encoding = 'UTF-8'
 
 mainClassName = 'cn.weathfold.client.ClientRunner'
 
-runWindows {
+runWindows << {
     systemProperty "java.library.path", "$buildDir/natives-windows"
     args 'test'
 }
 
-runLinux {
+runLinux << {
     systemProperty "java.library.path", "$buildDir/natives-linux"
     args 'test'
 }
 
-runOsx {
+runOsx << {
     systemProperty "java.library.path", "$buildDir/natives-osx"
     args 'test'
 }
