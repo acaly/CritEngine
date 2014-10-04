@@ -37,12 +37,14 @@ import org.apache.tools.ant.taskdefs.condition.Os
 run {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
         println "Running test client on windows."
+        println "Default path: ${System.getenv('PATH')}"
         systemProperty "java.library.path", "$buildDir/natives-windows"
     } else if (Os.isFamily(Os.FAMILY_MAC)) {
         println "Running test client on osx."
         systemProperty "java.library.path", "$buildDir/natives-osc"
     } else if (Os.isFamily(Os.FAMILY_UNIX)) {
         println "Running test client on linux."
+        println "Default lib path: ${System.getenv('LD_LIBRARY_PATH')}"
         systemProperty "java.library.path", "$buildDir/natives-linux;${System.getenv('LD_LIBRARY_PATH')}"
     }
     args 'test'
