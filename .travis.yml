@@ -2,7 +2,4 @@ language: java
 
 script:
 - gradle linuxNatives
-- cd build/natives-linux
-- ls
-- cd ../..
-- gradle run
+- gradle runLinux
