@@ -6,10 +6,12 @@ import org.lwjgl.opengl.GL12;
 
 import cn.weathfold.critengine.CEDebugger;
 import cn.weathfold.critengine.CritEngine;
+import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.util.Rect;
 
-public class Camera {
+public class Camera extends Entity {
 	
 	/**
 	 * 摄像机大小的对齐方式（width不变 or height不变）
@@ -18,16 +20,14 @@ public class Camera {
 		NONE, ALIGN_WIDTH, ALIGN_HEIGHT
 	};
 	
-	protected Rect camRect; //相机区域
 	protected Alignment align;
-	protected final Scene scene;
 	
-	public Camera(Scene scene) {
-		this.scene = scene;
+	public Camera(Scene scene, double x, double y) {
+		super(scene, x, y);
 	}
 	
 	public Camera(Scene scene, double x, double y, double width, double height, Alignment align) {
-		this(scene);
+		super(scene, x, y, width, height);
 		this.align = align;
 		
 		switch(align) {
@@ -40,8 +40,6 @@ public class Camera {
 		default:
 			break;
 		}
-		
-		camRect = new Rect(x, y, width, height);
 
 		CEDebugger.fine("Created camera at " + x + ", " + y +
 				" with size " + width + "," + height);
@@ -49,23 +47,25 @@ public class Camera {
 	}
 	
 	public Camera setPosition(double x, double y) {
-		this.camRect.pos.x = x;
-		this.camRect.pos.y = y;
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		attr.pos.x = x;
+		attr.pos.y = y;
 		return this;
 	}
 	
 	public void addPosition(double x, double y) {
-		this.camRect.pos.addVector(x, y);
-		
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		attr.pos.addVector(x, y);
 	}
 	
 	public void refreshStat() {
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
 		switch(align) {
 		case ALIGN_HEIGHT:
-			camRect.width = camRect.width * CritEngine.getAspectRatio();
+			attr.width = attr.width * CritEngine.getAspectRatio();
 			break;
 		case ALIGN_WIDTH:
-			camRect.height = camRect.width / CritEngine.getAspectRatio();
+			attr.height = attr.width / CritEngine.getAspectRatio();
 			break;
 		default:
 			break;
@@ -79,12 +79,13 @@ public class Camera {
 		GL11.glPushMatrix();
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
 		//平移到该Camera原点
-		double scale = (double)this.camRect.width / Display.getWidth();
+		double scale = (double)attr.width / Display.getWidth();
 		GL11.glScaled(scale, scale, 1F);
-		GL11.glTranslated(-this.camRect.getMinX(), -this.camRect.getMinY(), 0D);
+		GL11.glTranslated(-attr.getMinX(), -attr.getMinY(), 0D);
 		
-		scene.renderScene(); 
+		sceneObj.renderScene(); 
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

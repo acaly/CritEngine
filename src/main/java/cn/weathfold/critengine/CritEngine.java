@@ -6,6 +6,7 @@ package cn.weathfold.critengine;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 
 import cn.weathfold.critengine.scene.Scene;
 
@@ -42,6 +43,7 @@ public class CritEngine {
 
 		switchScene(sc);
 		CEDebugger.fine("Created view window successfully, with scene " + sc);
+		updateDisplayInfo();
 
 		while (!Display.isCloseRequested()) {
 			timer.updateTime();
@@ -53,7 +55,10 @@ public class CritEngine {
 	}
 
 	public static void updateDisplayInfo() {
-		setAspectRatio(Display.getWidth() / Display.getHeight());
+		setAspectRatio((float)Display.getWidth() / Display.getHeight());
+		if(currentScene != null) {
+			currentScene.mainCamera.refreshStat();
+		}
 	}
 
 	private static void initGLProps() {
@@ -112,22 +117,15 @@ public class CritEngine {
 		
 		// draw sequence begin
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		
-		// set the color of the quad (R,G,B,A)
-		/*
-		GL11.glColor3f(0.5f, 0.5f, 1.0f);
-		GL11.glBegin(GL11.GL_QUADS);
-		GL11.glVertex2f(100, 100);
-		GL11.glVertex2f(100 + 200, 100);
-		GL11.glVertex2f(100 + 200, 100 + 200);
-		GL11.glVertex2f(100, 100 + 200);
-		GL11.glEnd();*/
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 
 		if (currentScene != null) {
 			currentScene.mainCamera.draw();
 		}
+		
+		currentScene.renderBackground();
 
-		//Display.update();
 		// draw sequence end
 	}
 

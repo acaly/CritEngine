@@ -1,0 +1,27 @@
+/**
+ * 
+ */
+package cn.weathfold.critengine.entity.attribute;
+
+import cn.weathfold.critengine.util.Rect;
+
+/**
+ * @author WeAthFolD
+ *
+ */
+public class AttrGeometry extends Rect implements Attribute {
+	
+	public AttrGeometry(double x, double y) {
+		super(x, y, 0, 0);
+	}
+
+	public AttrGeometry(double x, double y, double w, double h) {
+		super(x, y, w, h);
+	}
+
+	@Override
+	public String getAtttributeID() {
+		return "geometry";
+	}
+
+}

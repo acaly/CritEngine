@@ -12,6 +12,7 @@ import java.util.Set;
 
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.render.ResourcePool;
 
 /**
  * 场景，是CE一切游戏机制所依附的基础。
@@ -64,6 +65,11 @@ public abstract class Scene {
 		});
 		return list;
 	}
+	
+	public void preloadResources(ResourcePool pool) {
+		
+	}
+
 	
 	private int cmpZLevel(Entity a, Entity b) {
 		if(a.zlevel == -1) a.zlevel = RNG.nextInt();

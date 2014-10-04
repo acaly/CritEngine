@@ -3,13 +3,11 @@
  */
 package cn.weathfold.client;
 
-import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.scene.GUIScene;
-import cn.weathfold.critengine.scene.Scene;
 
 /**
  * 用于测试的客户端启动~
@@ -25,7 +23,7 @@ public class ClientRunner {
 		Display.setTitle("CritEngine Demo");
 		try {
 			Display.setDisplayMode(new DisplayMode(800, 600));
-		} catch (LWJGLException e) {
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
 		CritEngine.start(new GUIScene());

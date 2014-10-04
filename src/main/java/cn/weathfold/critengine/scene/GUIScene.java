@@ -33,10 +33,8 @@ public class GUIScene extends Scene {
 				left = Keyboard.isKeyDown(Keyboard.KEY_LEFT),
 				right = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 		long elapsed = CritEngine.getTimer().getElapsedTime();
-		System.out.println("EL " + elapsed);
 		float hr = elapsed * velFactor * ((left ? -1 : 0) + (right ? 1 : 0)),
 				vr = elapsed * velFactor * ((up ? 1 : 0) + (down ? -1 : 0));
-		System.out.println("[" + hr + ", " + vr + "]");
 		mainCamera.addPosition(hr, vr);
 	}
 
