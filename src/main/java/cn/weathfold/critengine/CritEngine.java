@@ -4,6 +4,7 @@
 package cn.weathfold.critengine;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
@@ -72,7 +73,7 @@ public class CritEngine {
 	 * 获取全局的虚拟时间
 	 */
 	public static long getVirtualTime() {
-		return timer.getTime();
+		return timer == null ? (Sys.getTime() * 1000) / Sys.getTimerResolution() : timer.getTime();
 	}
 
 	/**

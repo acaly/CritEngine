@@ -15,6 +15,24 @@ import cn.weathfold.critengine.scene.GUIScene;
  *
  */
 public class ClientRunner {
+	
+	public static final boolean AUTO_QUIT = true;
+	
+	public static class MyScene extends GUIScene {
+		
+		private long initTime;
+		
+		public MyScene() {
+			this.initTime = CritEngine.getVirtualTime();
+		}
+		
+		public void frameUpdate() {
+			if(CritEngine.getVirtualTime() - initTime > 1000) {
+				Display.destroy();
+				System.exit(0);
+			}
+		}
+	}
 
 	/**
 	 * @param args
@@ -26,7 +44,7 @@ public class ClientRunner {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		CritEngine.start(new GUIScene());
+		CritEngine.start(new MyScene());
 	}
 
 }
