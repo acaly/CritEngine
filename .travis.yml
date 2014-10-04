@@ -4,5 +4,9 @@ script:
 - gradle linuxNatives
 - cd build/natives-linux
 - rm libjinput-linux.so liblwjgl.so libopenal.so
+- mv libjinput-linux64.so libjinput-linux.so
+- mv liblwjgl64.so liblwjgl.so 
+- mv libopenal64.so libopenal.so
+- ls
 - cd ../..
 - gradle run
