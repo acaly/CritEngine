@@ -20,7 +20,7 @@ import cn.weathfold.critengine.entity.Entity;
  */
 public class GUIScene extends Scene {
 	
-	protected Set<Entity> elements = new HashSet();
+	protected Set<Entity> elements = new HashSet<Entity>();
 	private float velFactor = 0.07F;
 	
 	public GUIScene() {
@@ -46,10 +46,11 @@ public class GUIScene extends Scene {
 	@Override
 	public void renderScene() {
 		GL11.glPushMatrix();
-		GL11.glColor3f(0.8F, 0.8F, 0F);
+		GL11.glColor4f(0.8F, 0.8F, 0F, 1F);
 		GL11.glDisable(GL11.GL_CULL_FACE);
 
 		GL11.glTranslated(300, 300, 0);
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		//GL11.glRotated(((int)CritEngine.getVirtualTime() / 80D), 0, 0, 1);
 		GL11.glBegin(GL11.GL_TRIANGLES); {
 		
@@ -59,6 +60,7 @@ public class GUIScene extends Scene {
 		
 		} GL11.glEnd();
 		GL11.glPopMatrix();
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 

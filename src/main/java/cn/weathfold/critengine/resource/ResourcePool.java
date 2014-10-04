@@ -1,11 +1,12 @@
 /**
  * 
  */
-package cn.weathfold.critengine.render;
+package cn.weathfold.critengine.resource;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
@@ -17,9 +18,24 @@ import org.lwjgl.opengl.GL30;
 public class ResourcePool {
 	
 	Map<String, Integer> textureMap = new HashMap<String, Integer>();
+	Map<String, Integer> soundMap = new HashMap<String, Integer>();
 	
-	public void preloadSound() {
+	public void preloadSound(SoundObject obj, String key) {
+		int buf = AL10.alGenBuffers();
+		AL10.alBufferData(buf, obj.getFormat(), obj.getBuffer(), obj.getSamplerFreq());
+		soundMap.put(key, buf);
+	}
+	
+	public void free() {
+		//释放贴图
+		for(int i : textureMap.values()) {
+			GL11.glDeleteTextures(i);
+		}
 		
+		//释放声音
+		for(int i : soundMap.values()) {
+			AL10.alDeleteBuffers(i);
+		}
 	}
 	
 	/* 加载一个特定的贴图资源，之后可以通过key来重新绑定它 */
@@ -49,6 +65,10 @@ public class ResourcePool {
 	
 	public int getTexture(String key) {
 		return textureMap.get(key);
+	}
+	
+	public int getSound(String key) {
+		return soundMap.get(key);
 	}
 	
 }

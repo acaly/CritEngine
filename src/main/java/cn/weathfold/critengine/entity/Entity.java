@@ -5,10 +5,7 @@ import java.util.Map;
 
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.entity.attribute.Attribute;
-import cn.weathfold.critengine.physics.CollideProperty;
 import cn.weathfold.critengine.scene.Scene;
-import cn.weathfold.critengine.util.Rect;
-import cn.weathfold.critengine.util.Vector2d;
 
 /**
  * Entity在Scene中被注册并且调用，执行的是“一个游戏对象”层次的行为。
@@ -58,6 +55,6 @@ public abstract class Entity {
 	}
 	
 	protected void addAttribute(Attribute attr) {
-		attributes.put(attr.getAtttributeID(), attr);
+		attributes.put(attr.getAttributeID(), attr);
 	}
 }

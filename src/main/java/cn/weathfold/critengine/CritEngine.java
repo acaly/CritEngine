@@ -7,9 +7,13 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
+import cn.weathfold.critengine.resource.CEResourceHandler;
+import cn.weathfold.critengine.resource.ResourcePool;
 import cn.weathfold.critengine.scene.Scene;
+import cn.weathfold.critengine.sound.CESoundEngine;
 
 /**
  * 引擎的调用入口。进行窗体的创建和消息循环的接管
@@ -22,6 +26,7 @@ public class CritEngine {
 
 	private static GameTimer timer;
 	private static float aspectRatio = 1.0F;
+	private static int ENFORCE_FPS_RATE = 60;
 
 	/**
 	 * 以某一Scene初始化窗体，并开始游戏循环。 客户端程序员有责任设置好Display的其他属性。
@@ -41,6 +46,7 @@ public class CritEngine {
 		timer = new GameTimer();
 
 		initGLProps();
+		CESoundEngine.init();
 
 		switchScene(sc);
 		CEDebugger.fine("Created view window successfully, with scene " + sc);
@@ -67,6 +73,8 @@ public class CritEngine {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0.0, Display.getWidth(), 0.0, Display.getHeight(), 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 	}
 
 	/**
@@ -84,12 +92,10 @@ public class CritEngine {
 	public static GameTimer getTimer() {
 		return timer;
 	}
-
+	
 	/**
-	 * 切换场景
-	 * 
+	 * 切换到另外一个Scene
 	 * @param another
-	 * @return
 	 */
 	public static void switchScene(Scene another) {
 		if (currentScene != null) {
@@ -111,30 +117,44 @@ public class CritEngine {
 	 * 每帧更新。
 	 */
 	private static void updateCycle() {
-		Display.sync(60);
+		//强制FPS同步
+		Display.sync(ENFORCE_FPS_RATE);
 		
 		timer.updateTime();
+		CESoundEngine.frameUpdate();
+		
 		currentScene.frameUpdate();
 		
 		// draw sequence begin
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
-
+		
+		GL11.glPushMatrix();
+		GL11.glScalef(Display.getWidth(), Display.getHeight(), 1.0F);
+		currentScene.renderBackground();
+		GL11.glPopMatrix();
+		
 		if (currentScene != null) {
 			currentScene.mainCamera.draw();
 		}
-		
-		currentScene.renderBackground();
-
 		// draw sequence end
 	}
 
 	private static void disposeCurrentScene() {
-
+		if(!currentScene.keepResourcePool()) {
+			CEResourceHandler.freeResourcePool(currentScene);
+		}
+		currentScene = null;
 	}
 
 	private static void loadScene(Scene sc) {
+		ResourcePool rp = CEResourceHandler.allocatePool(sc);
+		CEDebugger.fine("Loading scene " + sc);
+		if(rp != null) {
+			sc.preloadResources(rp);
+		}
+		CEDebugger.fine("Loading scene " + sc + " finished");
 		currentScene = sc;
 	}
 

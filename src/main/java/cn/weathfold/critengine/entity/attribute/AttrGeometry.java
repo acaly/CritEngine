@@ -10,7 +10,7 @@ import cn.weathfold.critengine.util.Rect;
  *
  */
 public class AttrGeometry extends Rect implements Attribute {
-	
+
 	public AttrGeometry(double x, double y) {
 		super(x, y, 0, 0);
 	}
@@ -20,7 +20,7 @@ public class AttrGeometry extends Rect implements Attribute {
 	}
 
 	@Override
-	public String getAtttributeID() {
+	public String getAttributeID() {
 		return "geometry";
 	}
 

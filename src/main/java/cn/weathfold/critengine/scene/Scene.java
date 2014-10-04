@@ -12,7 +12,7 @@ import java.util.Set;
 
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.Entity;
-import cn.weathfold.critengine.render.ResourcePool;
+import cn.weathfold.critengine.resource.ResourcePool;
 
 /**
  * 场景，是CE一切游戏机制所依附的基础。
@@ -45,6 +45,9 @@ public abstract class Scene {
 	 */
 	public void renderBackground() {}
 	
+	/**
+	 * 获取需要渲染的实体列表，已经以渲染顺序排序完毕。
+	 */
 	public List<Entity> getRenderEntityList() {
 		List<Entity> list = new ArrayList<Entity>(getSceneEntities());
 		Collections.sort(list, new Comparator<Entity>() {
@@ -66,10 +69,17 @@ public abstract class Scene {
 		return list;
 	}
 	
+	/**
+	 * 在资源池中预加载需要的声音和图像文件
+	 * @param pool
+	 */
 	public void preloadResources(ResourcePool pool) {
 		
 	}
-
+	
+	public boolean keepResourcePool() {
+		return false;
+	}
 	
 	private int cmpZLevel(Entity a, Entity b) {
 		if(a.zlevel == -1) a.zlevel = RNG.nextInt();

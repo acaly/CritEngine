@@ -77,6 +77,7 @@ public class Camera extends Entity {
 	 */
 	public void draw() {
 		GL11.glPushMatrix();
+		GL11.glColor4f(1F, 1F, 1F, 1F);
 		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		
 		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
