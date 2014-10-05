@@ -30,8 +30,18 @@ public class Vector2d {
 		return x * x + y * y;
 	}
 	
-	public double getDistance() {
+	public double getMod() {
 		return Math.sqrt(getDistSquared());
+	}
+	
+	public double distanceTo(Vector2d another) {
+		return distanceTo(another.x, another.y);
+	}
+	
+	public double distanceTo(double x, double y) {
+		double dx = this.x - x,
+				dy = this.y - y;
+		return Math.sqrt(dx * dx + dy * dy);
 	}
 	
 	public void normalize() {
@@ -43,6 +53,13 @@ public class Vector2d {
 	public void addVector(double x, double y) {
 		this.x += x;
 		this.y += y;
+	}
+	
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Vector2d))
+			return false;
+		Vector2d v2 = (Vector2d) obj;
+		return v2.x == x && v2.y == y;
 	}
 
 }

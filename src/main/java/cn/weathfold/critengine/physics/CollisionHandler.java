@@ -47,7 +47,7 @@ public class CollisionHandler implements IEntityProcessor {
 			return;
 		}
 		
-		//System.out.println(set);
+		System.out.println(e.getGeomProps().getMinX() + ", " + e.getGeomProps().getMinY());
 		Iterator<Entity> iter = set.iterator();
 		Rect rect = new Rect(iter.next().getGeomProps());
 		//比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
@@ -59,19 +59,31 @@ public class CollisionHandler implements IEntityProcessor {
 	}
 	
 	public void handlesVelUpdate(Entity e, AttrGeometry pre, Vector2d after) {
-		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.pos, after);
+		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.pos, after, filter, e);
+		//System.out.println(res.collided);
 		if(!res.collided) {
-			pre.pos = after;
-			return;
+			//Vector2d v1 = pre.pos.copy(), v2 = after.copy();
+			//v1.addVector(pre.width, pre.height);
+			//v2.addVector(pre.width, pre.height);
+			//res = CEPhysicEngine.rayTrace(e.sceneObj, v1, v2, filter, e);
+			if(!res.collided) {
+				pre.pos = after;
+				return;
+			}
 		}
 		
 		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
 		if(!collider.doesMove)
 			return;
+		
 		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
 		//愉快的反弹
-		vel.vel.x *= -Math.abs(res.edge.dirX) * collider.attnRate;
-		vel.vel.y *= -Math.abs(res.edge.dirY) * collider.attnRate;
+		if(res.edge.dirX != 0)
+			vel.vel.x = Math.abs(vel.vel.x) * res.edge.dirX * collider.attnRate;
+		if(res.edge.dirY != 0)
+			vel.vel.y = Math.abs(vel.vel.y) * res.edge.dirY * collider.attnRate;
+		
+		//System.out.println(e + " CH " + res.edge + " " + res.collidedEntity);
 		
 		alignEntity(e, res.collidedEntity.getGeomProps(), res.edge);
 	}
@@ -86,6 +98,7 @@ public class CollisionHandler implements IEntityProcessor {
 		double min = Double.MAX_VALUE;
 		
 		Vector2d res = null;
+		//EnumEdgeSide rSide = null;
 		for(EnumEdgeSide side : EnumEdgeSide.values()) {
 			if(side == EnumEdgeSide.NONE)
 				continue;
@@ -94,8 +107,10 @@ public class CollisionHandler implements IEntityProcessor {
 			if(dist < min) {
 				res = vec;
 				min = dist;
+				//rSide = side;
 			}
 		}
+		//res.addVector(rSide.dirX * 0.001, rSide.dirY * 0.001);
 		geo0.pos = res;
 	}
 	

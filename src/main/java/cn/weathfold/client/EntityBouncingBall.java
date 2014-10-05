@@ -16,7 +16,7 @@ public class EntityBouncingBall extends Entity {
 
 	public EntityBouncingBall(Scene scene, double x, double y, double size) {
 		super(scene, x, y, size, size);
-		this.addAttribute(new AttrVelocity());
+		this.addAttribute(new AttrVelocity().setGravity(0.1D));
 		this.addAttribute(new AttrCollider());
 	}
 	

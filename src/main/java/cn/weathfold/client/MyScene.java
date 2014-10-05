@@ -32,9 +32,13 @@ public class MyScene extends Scene {
 	
 	
 	public MyScene() {
-		this.mainCamera = new Camera(this, 0, 0, 600, 1, Alignment.ALIGN_WIDTH);
+		this.mainCamera = new Camera(this, 0, 0, 1200, 1, Alignment.ALIGN_WIDTH);
 		this.elements.add(new EntitySolid(this, 0, 0, 600, 40).setTexture(TEX_WALL, 0, 0, 15, 1));
-		this.elements.add(new EntityBouncingBall(this, 100, 200, 40).setVelocity(0, -1).setTexture(TEX_BALL));
+		this.elements.add(new EntitySolid(this, 0, 0, 40, 560).setTexture(TEX_WALL, 0, 0, 1, 15));
+		this.elements.add(new EntitySolid(this, 0, 560, 600, 40).setTexture(TEX_WALL, 0, 0, 15, 1));
+		this.elements.add(new EntitySolid(this, 600, 0, 40, 600).setTexture(TEX_WALL, 0, 0, 1, 15));
+		
+		this.elements.add(new EntityBouncingBall(this, 100, 200, 40).setVelocity(1, 0).setTexture(TEX_BALL));
 	}
 	
 	@Override

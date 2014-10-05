@@ -4,6 +4,7 @@
 package cn.weathfold.critengine.physics;
 
 import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.util.Vector2d;
 
 /**
  * “光线追踪”结果，包含了哪条边被碰撞到，以及被碰撞到的实体。
@@ -24,15 +25,17 @@ public class RayTraceResult {
 	public boolean collided; //是否遇到了实体？
 	public EnumEdgeSide edge; //碰撞到的边
 	public Entity collidedEntity;
+	public Vector2d hitPos;
 	
 	public RayTraceResult() {
 		collided = false;
 		edge = EnumEdgeSide.NONE;
 	}
 	
-	public RayTraceResult(EnumEdgeSide side, Entity e) {
+	public RayTraceResult(EnumEdgeSide side, Entity e, Vector2d hit) {
 		collided = true;
 		edge = side;
 		collidedEntity = e;
+		hitPos = hit;
 	}
 }

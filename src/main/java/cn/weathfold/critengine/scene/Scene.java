@@ -67,7 +67,7 @@ public abstract class Scene {
 			if(e.getGeomProps().intersects(rt)) {
 				if(filter != null && !filter.isEntityApplicable(e))
 					continue;
-				boolean flag = false;;
+				boolean flag = false;
 				for(Entity exp : exceptions) {
 					if(exp == e) {
 						flag = true;
