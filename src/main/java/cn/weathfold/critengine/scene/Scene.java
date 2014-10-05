@@ -6,13 +6,16 @@ package cn.weathfold.critengine.scene;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.entity.IEntityFilter;
 import cn.weathfold.critengine.resource.ResourcePool;
+import cn.weathfold.critengine.util.Rect;
 
 /**
  * 场景，是CE一切游戏机制所依附的基础。
@@ -46,6 +49,31 @@ public abstract class Scene {
 	 * 绘制Scene的固定背景。这层的绘制不受Camera的控制，(0, 0)->(1, 1)的范围将会被映射到整个屏幕上。
 	 */
 	public void renderBackground() {}
+	
+	/**
+	 * 获取在矩形范围内（或穿过）的所有实体。
+	 * @param rt
+	 * @return
+	 */
+	public Set<Entity> getEntitiesWithin(Rect rt) {
+		return getEntitiesWithin(rt, null);
+	}
+	
+	public Set<Entity> getEntitiesWithin(Rect rt, IEntityFilter filter, Entity... exceptions) {
+		Set<Entity> res = new HashSet<Entity>();
+		for(Entity e : getSceneEntities()) {
+			if(e.getGeomProps().intersects(rt)) {
+				if(filter != null && !filter.isEntityApplicable(e))
+					continue;
+				for(Entity exp : exceptions) {
+					if(exp == e)
+						continue;
+				}
+				res.add(e);
+			}
+		}
+		return res;
+	}
 	
 	/**
 	 * 获取需要渲染的实体列表，已经以渲染顺序排序完毕。

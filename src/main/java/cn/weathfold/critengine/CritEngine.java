@@ -17,8 +17,7 @@ import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.sound.CESoundEngine;
 
 /**
- * 引擎的调用入口。进行窗体的创建和消息循环的接管
- * 
+ * 引擎的调用入口。进行窗体的初始化、创建，以及Scene的切换。
  * @author WeAthFolD
  */
 public class CritEngine {
@@ -120,29 +119,9 @@ public class CritEngine {
 	private static void updateCycle() {
 		//强制FPS同步
 		Display.sync(ENFORCE_FPS_RATE);
-		
 		timer.updateTime();
-		CESoundEngine.frameUpdate();
 		
-		currentScene.frameUpdate();
-		for(Entity e : currentScene.getSceneEntities()) {
-			e.onFrameUpdate();
-		}
-		
-		// draw sequence begin
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
-		GL11.glPushMatrix();
-		GL11.glScalef(Display.getWidth(), Display.getHeight(), 1.0F);
-		currentScene.renderBackground();
-		GL11.glPopMatrix();
-		
-		if (currentScene != null) {
-			currentScene.mainCamera.draw();
-		}
-		// draw sequence end
+		CEUpdateProcessor.frameUpdate(currentScene);
 	}
 
 	private static void disposeCurrentScene() {

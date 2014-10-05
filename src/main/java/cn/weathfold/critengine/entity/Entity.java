@@ -54,6 +54,10 @@ public abstract class Entity {
 		return attributes.get(id);
 	}
 	
+	public AttrGeometry getGeomProps() {
+		return (AttrGeometry) getAttribute("geometry");
+	}
+	
 	protected void addAttribute(Attribute attr) {
 		attributes.put(attr.getAttributeID(), attr);
 	}

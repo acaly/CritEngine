@@ -21,6 +21,10 @@ public class Rect {
 		this.height = h;
 	}
 	
+	public Rect(Rect r2) {
+		this(r2.pos.x, r2.pos.y, r2.width, r2.height);
+	}
+	
 	/**
 	 * 判断某两个区域是否相交。
 	 * @param r2 另外一个Rect
@@ -35,6 +39,16 @@ public class Rect {
 	 */
 	private boolean ins(double a, double b, double c, double d) {
 		return (c <= a && d > a) || (c < b);
+	}
+	
+	public void expand(Rect r2) {
+		pos.x = Math.min(r2.getMinX(), pos.x);
+		pos.y = Math.min(r2.getMinY(), pos.y);
+		double 
+			maxX = Math.max(getMaxX(), r2.getMaxX()),
+			maxY = Math.max(getMaxY(), r2.getMaxY());
+		width = maxX - pos.x;
+		height = maxY - pos.y;
 	}
 	
 	public double getMinX() {
