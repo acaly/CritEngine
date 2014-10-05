@@ -30,6 +30,7 @@ public class PNGTextureObject implements TextureObject {
 			height = dec.getHeight();
 			
 			buf = ByteBuffer.allocateDirect(4 * dec.getWidth() * dec.getHeight());
+			
 			dec.decode(buf, dec.getWidth() * 4, Format.RGBA);
 			
 			buf.flip();

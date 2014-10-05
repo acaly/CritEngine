@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
 
+import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.resource.CEResourceHandler;
 import cn.weathfold.critengine.resource.ResourcePool;
 import cn.weathfold.critengine.scene.Scene;
@@ -124,6 +125,9 @@ public class CritEngine {
 		CESoundEngine.frameUpdate();
 		
 		currentScene.frameUpdate();
+		for(Entity e : currentScene.getSceneEntities()) {
+			e.onFrameUpdate();
+		}
 		
 		// draw sequence begin
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);

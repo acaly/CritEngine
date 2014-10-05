@@ -1,5 +1,8 @@
 package cn.weathfold.critengine.camera;
 
+import java.util.List;
+
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -10,6 +13,7 @@ import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.util.Rect;
+import cn.weathfold.critengine.util.Vector2d;
 
 public class Camera extends Entity {
 	
@@ -72,6 +76,15 @@ public class Camera extends Entity {
 		}
 	}
 	
+	public Vector2d getOffsetedMouseLocation() {
+		double mx = Mouse.getX(), my = Mouse.getY();
+		AttrGeometry pos = (AttrGeometry) this.getAttribute("geometry");
+		double scale = pos.width / Display.getWidth();
+		mx *= scale;
+		my *= scale;
+		return new Vector2d(mx + pos.getMinX(), my + pos.getMinY());
+	}
+	
 	/**
 	 * 绘制摄像机范围内部的所有物体，包括Scene和Entity。
 	 */
@@ -87,6 +100,13 @@ public class Camera extends Entity {
 		GL11.glTranslated(-attr.getMinX(), -attr.getMinY(), 0D);
 		
 		sceneObj.renderScene(); 
+		
+		List<Entity> list = this.sceneObj.getRenderEntityList();
+		for(Entity e : list) {
+			AttrGeometry entPos = (AttrGeometry) e.getAttribute("geometry");
+			if(entPos.intersects(attr))
+				e.drawEntity();
+		}
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();

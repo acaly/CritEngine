@@ -38,7 +38,9 @@ public abstract class Scene {
 	/**
 	 * 绘制场景。
 	 */
-	public abstract void renderScene();
+	public void renderScene() {
+		
+	}
 	
 	/**
 	 * 绘制Scene的固定背景。这层的绘制不受Camera的控制，(0, 0)->(1, 1)的范围将会被映射到整个屏幕上。
@@ -49,7 +51,11 @@ public abstract class Scene {
 	 * 获取需要渲染的实体列表，已经以渲染顺序排序完毕。
 	 */
 	public List<Entity> getRenderEntityList() {
-		List<Entity> list = new ArrayList<Entity>(getSceneEntities());
+		Set<Entity> set = getSceneEntities();
+		if(set == null)
+			return new ArrayList<Entity>();
+		
+		List<Entity> list = new ArrayList<Entity>(set);
 		Collections.sort(list, new Comparator<Entity>() {
 
 			@Override
