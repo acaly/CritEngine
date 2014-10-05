@@ -8,6 +8,7 @@ import java.util.Set;
 
 import cn.weathfold.critengine.IEntityProcessor;
 import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.entity.IEntityFilter;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.physics.RayTraceResult.EnumEdgeSide;
 import cn.weathfold.critengine.physics.attribute.AttrCollider;
@@ -20,13 +21,33 @@ import cn.weathfold.critengine.util.Vector2d;
  * @author WeAthFolD
  */
 public class CollisionHandler implements IEntityProcessor {
+	
+	private static class CollidableEntityFilter implements IEntityFilter {
+
+		@Override
+		public boolean isEntityApplicable(Entity ent) {
+			return ent.hasAttribute("collider");
+		}
+		
+	}
+	
+	private static IEntityFilter filter = new CollidableEntityFilter();
 
 	@Override
 	public void processEntity(Entity e) {
-		Set<Entity> set = e.sceneObj.getEntitiesWithin(e.getGeomProps(), null, e);
+		if(!filter.isEntityApplicable(e)) {
+			return;
+		}
+		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
+		if(!collider.doesMove)
+			return;
+		
+		Set<Entity> set = e.sceneObj.getEntitiesWithin(e.getGeomProps(), filter, e);
 		if(set.isEmpty()) {
 			return;
 		}
+		
+		//System.out.println(set);
 		Iterator<Entity> iter = set.iterator();
 		Rect rect = new Rect(iter.next().getGeomProps());
 		//比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
@@ -45,6 +66,8 @@ public class CollisionHandler implements IEntityProcessor {
 		}
 		
 		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
+		if(!collider.doesMove)
+			return;
 		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
 		//愉快的反弹
 		vel.vel.x *= -Math.abs(res.edge.dirX) * collider.attnRate;

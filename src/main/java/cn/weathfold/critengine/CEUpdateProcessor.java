@@ -24,6 +24,8 @@ public class CEUpdateProcessor {
 	private static Scene activeScene;
 	
 	private static Set<IEntityProcessor> entityProcessors = new HashSet<IEntityProcessor>();
+	protected static boolean tickState = true; //当前tick是否需要继续更新
+	
 	static {
 		entityProcessors.add(CEPhysicEngine.INSTANCE);
 	}
@@ -34,10 +36,19 @@ public class CEUpdateProcessor {
 		CESoundEngine.frameUpdate();
 		
 		activeScene.frameUpdate();
+		if(!tickState) {
+			tickState = true;
+			return;
+		}
+		
 		for(Entity e : activeScene.getSceneEntities()) {
 			e.onFrameUpdate();
 			for(IEntityProcessor prc : entityProcessors) {
 				prc.processEntity(e);
+			}
+			if(!tickState) {
+				tickState = true;
+				return;
 			}
 		}
 		

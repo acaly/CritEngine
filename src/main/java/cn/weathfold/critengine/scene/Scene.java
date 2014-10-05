@@ -26,17 +26,18 @@ public abstract class Scene {
 	public Camera mainCamera;
 	protected static Random RNG = new Random();
 	
+	protected Set<Entity> elements = new HashSet<Entity>();
+
+	public Set<Entity> getSceneEntities() {
+		return elements;
+	}
+	
 	/**
 	 * 帧更新， 当前Scene被激活时被调用。
 	 */
 	public void frameUpdate() {
 		
 	}
-	
-	/**
-	 * 获取在场景中活跃的所有Entity。
-	 */
-	public abstract Set<Entity> getSceneEntities();
 	
 	/**
 	 * 绘制场景。
@@ -61,17 +62,23 @@ public abstract class Scene {
 	
 	public Set<Entity> getEntitiesWithin(Rect rt, IEntityFilter filter, Entity... exceptions) {
 		Set<Entity> res = new HashSet<Entity>();
+		
 		for(Entity e : getSceneEntities()) {
 			if(e.getGeomProps().intersects(rt)) {
 				if(filter != null && !filter.isEntityApplicable(e))
 					continue;
+				boolean flag = false;;
 				for(Entity exp : exceptions) {
-					if(exp == e)
-						continue;
+					if(exp == e) {
+						flag = true;
+						break;
+					}
 				}
+				if(flag) continue;
 				res.add(e);
 			}
 		}
+		
 		return res;
 	}
 	

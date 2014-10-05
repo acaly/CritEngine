@@ -25,15 +25,16 @@ public class VelocityUpdater implements IEntityProcessor {
 		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
 		if(vel == null) return;
 		
+		//System.out.println("")
 		long passedTime = CritEngine.getTimer().getElapsedTime();
 		Vector2d newPos = pos.pos.copy();
-		newPos.addVector(vel.vel.x * passedTime / 1000, vel.vel.y * passedTime / 1000);
+		newPos.addVector(vel.vel.x * passedTime, vel.vel.y * passedTime);
 		
 		AttrCollider ac = (AttrCollider) e.getAttribute("collider");
 		if(ac != null) {
-			
+			CEPhysicEngine.collider.handlesVelUpdate(e, pos, newPos);
 		} else {
-			
+			pos.pos = newPos;
 		}
 	}
 

@@ -101,6 +101,7 @@ public class CritEngine {
 		if (currentScene != null) {
 			disposeCurrentScene();
 		}
+		CEUpdateProcessor.tickState = false;
 		loadScene(another);
 	}
 

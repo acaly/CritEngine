@@ -17,8 +17,16 @@ public class AttrCollider implements Attribute {
 	/* 实体是否在地面上 */
 	public boolean onGround = false;
 	
+	/* 实体碰撞时是否移动 */
+	public boolean doesMove = true;
+	
 	public AttrCollider setAttnRate(float f) {
 		attnRate = f;
+		return this;
+	}
+	
+	public AttrCollider setMove(boolean b) {
+		doesMove = b;
 		return this;
 	}
 	

@@ -3,21 +3,16 @@
  */
 package cn.weathfold.client;
 
-import java.util.Set;
-
 import org.lwjgl.opengl.GL11;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.camera.Camera.Alignment;
-import cn.weathfold.critengine.entity.Entity;
-import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.entity.gui.GUIButton;
 import cn.weathfold.critengine.render.CERenderEngine;
 import cn.weathfold.critengine.render.RenderUtils;
 import cn.weathfold.critengine.resource.PNGTextureObject;
 import cn.weathfold.critengine.resource.ResourcePool;
-import cn.weathfold.critengine.scene.GUIScene;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.util.Rect;
 
@@ -25,7 +20,7 @@ import cn.weathfold.critengine.util.Rect;
  * @author WeAthFolD
  *
  */
-public class SceneMain extends GUIScene {
+public class SceneMain extends Scene {
 	
 	public static final String
 		TEX_BACK = "back",
@@ -48,7 +43,7 @@ public class SceneMain extends GUIScene {
 
 			@Override
 			public void onButtonReleased() {
-				CritEngine.switchScene(new ClientRunner.MyScene());
+				CritEngine.switchScene(new MyScene());
 			}
 			
 			public void drawEntity() {
@@ -59,6 +54,7 @@ public class SceneMain extends GUIScene {
 			}
 		
 		});
+		System.out.println("Main Elements : " + elements);
 	}
 	
 	/* (non-Javadoc)

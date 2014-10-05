@@ -7,7 +7,9 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import cn.weathfold.critengine.CritEngine;
-import cn.weathfold.critengine.scene.GUIScene;
+import cn.weathfold.critengine.camera.Camera;
+import cn.weathfold.critengine.camera.Camera.Alignment;
+import cn.weathfold.critengine.scene.Scene;
 
 /**
  * @author WeAthFolD
@@ -15,12 +17,13 @@ import cn.weathfold.critengine.scene.GUIScene;
  */
 public class DebugClientRunner {
 	
-	public static class MyScene extends GUIScene {
+	public static class MyScene extends Scene {
 		
 		private long initTime;
 		
 		public MyScene() {
 			this.initTime = CritEngine.getVirtualTime();
+			this.mainCamera = new Camera(this, 0, 0, 400, 400, Alignment.ALIGN_WIDTH);
 		}
 		
 		@Override

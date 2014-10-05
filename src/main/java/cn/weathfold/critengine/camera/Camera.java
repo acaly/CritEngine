@@ -95,7 +95,7 @@ public class Camera extends Entity {
 		
 		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
 		//平移到该Camera原点
-		double scale = (double)attr.width / Display.getWidth();
+		double scale = Display.getWidth() / (double)attr.width;
 		GL11.glScaled(scale, scale, 1F);
 		GL11.glTranslated(-attr.getMinX(), -attr.getMinY(), 0D);
 		
