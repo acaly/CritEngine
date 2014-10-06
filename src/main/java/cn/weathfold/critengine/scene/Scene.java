@@ -64,7 +64,7 @@ public abstract class Scene {
 		Set<Entity> res = new HashSet<Entity>();
 		
 		for(Entity e : getSceneEntities()) {
-			if(e.getGeomProps().intersects(rt)) {
+			if(rt.intersects(e.getGeomProps())) {
 				if(filter != null && !filter.isEntityApplicable(e))
 					continue;
 				boolean flag = false;

@@ -30,7 +30,7 @@ public class CEPhysicEngine implements IEntityProcessor {
 	@Override
 	public void processEntity(Entity e) {
 		velUpdater.processEntity(e);
-		//collider.processEntity(e);
+		collider.processEntity(e);
 	}
 	
 	public static RayTraceResult rayTrace(Scene scene, Vector2d vec0, Vector2d vec1) {

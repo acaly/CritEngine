@@ -38,7 +38,8 @@ public class Rect {
 	 * 判断一维线段[a, b], [c, d]是否有交集
 	 */
 	private boolean ins(double a, double b, double c, double d) {
-		return (c <= a && d > a) || (c < b);
+		//System.out.println(a + " " + b + " " + c + " " + d + ((c <= a && d > a) || (c < b)));
+		return d <= a ? false : (c < b);
 	}
 	
 	public void expand(Rect r2) {
@@ -65,6 +66,10 @@ public class Rect {
 	
 	public double getMaxY() {
 		return pos.y + height;
+	}
+	
+	public String toString() {
+		return "[RECT " + pos.x + " " + pos.y + " " + getMaxX() + " " + getMaxY() + "]";
 	}
 	
 }

@@ -34,17 +34,7 @@ public class Camera extends Entity {
 		super(scene, x, y, width, height);
 		this.align = align;
 		
-		switch(align) {
-		case ALIGN_HEIGHT:
-			width = height * CritEngine.getAspectRatio();
-			break;
-		case ALIGN_WIDTH:
-			height = width / CritEngine.getAspectRatio();
-			break;
-		default:
-			break;
-		}
-
+		refreshStat();
 		CEDebugger.fine("Created camera at " + x + ", " + y +
 				" with size " + width + "," + height);
 		 

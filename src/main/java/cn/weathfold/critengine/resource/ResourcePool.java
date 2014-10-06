@@ -40,6 +40,16 @@ public class ResourcePool {
 		}
 	}
 	
+	public String[] preloadTextureArray(TextureObject obj[], String key) {
+		String[] keys = new String[obj.length];
+		for(int i = 0; i < obj.length; ++i) {
+			String k = key + i;
+			preloadTexture(obj[i], k);
+			keys[i] = k;
+		}
+		return keys;
+	}
+	
 	/* 加载一个特定的贴图资源，之后可以通过key来重新绑定它 */
 	public void preloadTexture(TextureObject obj, String key) {
 		int texID = GL11.glGenTextures();

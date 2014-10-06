@@ -12,7 +12,7 @@ import cn.weathfold.critengine.entity.attribute.Attribute;
 public class AttrCollider implements Attribute {
 	
 	/* (反弹后)速度的衰减率 */
-	public float attnRate = 0.9F;
+	public float attnRate = 1.0F;
 
 	/* 实体是否在地面上 */
 	public boolean onGround = false;

@@ -64,5 +64,18 @@ public class PNGTextureObject implements TextureObject {
 	public int getHeight() {
 		return height;
 	}
+	
+	/**
+	 * 读取一个序列的便捷方法
+	 * @param arr
+	 * @return
+	 */
+	public static PNGTextureObject[] readArray(String... arr) {
+		PNGTextureObject res[] = new PNGTextureObject[arr.length];
+		for(int i = 0; i < arr.length; ++i) {
+			res[i] = new PNGTextureObject(arr[i]);
+		}
+		return res;
+	}
 
 }

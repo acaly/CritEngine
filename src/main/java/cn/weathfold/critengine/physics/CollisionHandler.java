@@ -47,7 +47,8 @@ public class CollisionHandler implements IEntityProcessor {
 			return;
 		}
 		
-		System.out.println(e.getGeomProps().getMinX() + ", " + e.getGeomProps().getMinY());
+		//System.out.println(set);
+		//System.out.println(e.getGeomProps().getMinX() + ", " + e.getGeomProps().getMinY());
 		Iterator<Entity> iter = set.iterator();
 		Rect rect = new Rect(iter.next().getGeomProps());
 		//比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
@@ -55,28 +56,43 @@ public class CollisionHandler implements IEntityProcessor {
 			Rect r2 = iter.next().getGeomProps();
 			rect.expand(r2);
 		}
-		alignEntity(e, rect);
+		EnumEdgeSide side = alignEntity(e, rect);
+		//反弹
+		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");
+		if(attrVel == null)
+			return;
+		if(side.dirX != 0)
+			attrVel.vel.x = Math.abs(attrVel.vel.x) * side.dirX * collider.attnRate;
+		if(side.dirY != 0)
+			attrVel.vel.y = Math.abs(attrVel.vel.y) * side.dirY * collider.attnRate;
+	}
+	
+	private int sgn(double x) {
+		return x > 0 ? 1 : x == 0 ? 0 : -1;
 	}
 	
 	public void handlesVelUpdate(Entity e, AttrGeometry pre, Vector2d after) {
-		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.pos, after, filter, e);
-		//System.out.println(res.collided);
-		if(!res.collided) {
-			//Vector2d v1 = pre.pos.copy(), v2 = after.copy();
-			//v1.addVector(pre.width, pre.height);
-			//v2.addVector(pre.width, pre.height);
-			//res = CEPhysicEngine.rayTrace(e.sceneObj, v1, v2, filter, e);
-			if(!res.collided) {
-				pre.pos = after;
-				return;
-			}
-		}
-		
+		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
 		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
 		if(!collider.doesMove)
 			return;
 		
-		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
+		double offsetX = pre.width,
+			   offsetY = pre.height;	
+		//pre.pos.addVector(offsetX, offsetY);
+		//after.addVector(offsetX, offsetY);
+		
+		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.pos, after, filter, e);
+		
+		//pre.pos.addVector(-offsetX, -offsetY);
+		//after.addVector(-offsetX, -offsetY);
+		
+		//System.out.println(res.collided);
+		if(!res.collided) {
+			pre.pos = after;
+			return;
+		}
+		//System.out.println(res.edge);
 		//愉快的反弹
 		if(res.edge.dirX != 0)
 			vel.vel.x = Math.abs(vel.vel.x) * res.edge.dirX * collider.attnRate;
@@ -84,20 +100,20 @@ public class CollisionHandler implements IEntityProcessor {
 			vel.vel.y = Math.abs(vel.vel.y) * res.edge.dirY * collider.attnRate;
 		
 		//System.out.println(e + " CH " + res.edge + " " + res.collidedEntity);
-		
 		alignEntity(e, res.collidedEntity.getGeomProps(), res.edge);
 	}
 	
 	/**
 	 * 将实体就近对齐到某个区域旁边
 	 **/
-	private void alignEntity(Entity targ, Rect bound) {
+	private EnumEdgeSide alignEntity(Entity targ, Rect bound) {
 		AttrGeometry 
 			geo0 = targ.getGeomProps();
 		
 		double min = Double.MAX_VALUE;
 		
 		Vector2d res = null;
+		EnumEdgeSide res2 = EnumEdgeSide.NONE;
 		//EnumEdgeSide rSide = null;
 		for(EnumEdgeSide side : EnumEdgeSide.values()) {
 			if(side == EnumEdgeSide.NONE)
@@ -107,11 +123,13 @@ public class CollisionHandler implements IEntityProcessor {
 			if(dist < min) {
 				res = vec;
 				min = dist;
+				res2 = side;
 				//rSide = side;
 			}
 		}
 		//res.addVector(rSide.dirX * 0.001, rSide.dirY * 0.001);
 		geo0.pos = res;
+		return res2;
 	}
 	
 	private void alignEntity(Entity targ, Rect bound, EnumEdgeSide side) {

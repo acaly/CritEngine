@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.Set;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
 
 import cn.weathfold.critengine.CritEngine;
@@ -23,7 +24,7 @@ import cn.weathfold.critengine.scene.Scene;
  */
 public class CESoundEngine {
 
-	private static float distanceScale = 1.0F;
+	private static float distanceScale = 0.5F;
 	
 	@SuppressWarnings("unused")
 	private static FloatBuffer
@@ -67,13 +68,25 @@ public class CESoundEngine {
 		return distanceScale;
 	}
 	
+	/* 场景切换时的清理工作  */
 	public static void refresh() {
-		
-		
+		for(SourceData src : playingSounds) {
+			AL10.alSourceStop(src.sourceID);
+			AL10.alDeleteSources(src.sourceID);
+		}
+		playingSounds.clear();
 	}
 	
 	public static void init() {
-		//AL10.alGenBuffers();
+		try {
+			AL.create();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void cleanup() {
+		AL.destroy();
 	}
 	
 	public static SourceData playGlobalSound(String key, SoundAttributes attr) {
@@ -83,7 +96,7 @@ public class CESoundEngine {
 		}
 		
 		int buf = AL10.alGenSources();
-		SourceData sd = new SourceData(true, attr, buf, 1000);
+		SourceData sd = new SourceData(true, attr, buf, attr.lifeTime);
 		
 		//设置参数
 		AL10.alSourcei(buf, AL10.AL_BUFFER, sid);
@@ -92,7 +105,7 @@ public class CESoundEngine {
 		AL10.alSource3f(buf, AL10.AL_POSITION, listenerPos.get(0), listenerPos.get(1), 0);
 		AL10.alSource3f(buf, AL10.AL_VELOCITY, 0, 0, 0);
 		
-		AL10.alSourcePause(buf);;
+		AL10.alSourcePlay(buf);;
 		playingSounds.add(sd);
 		return sd;
 	}
@@ -106,7 +119,7 @@ public class CESoundEngine {
 		int buf = AL10.alGenSources();
 		attr.pos.x *= distanceScale;
 		attr.pos.y *= distanceScale;
-		SourceData sd = new SourceData(true, attr, buf, 1000);
+		SourceData sd = new SourceData(true, attr, buf, attr.lifeTime);
 		
 		//设置参数
 		AL10.alSourcei(buf, AL10.AL_BUFFER, sid);
@@ -115,7 +128,7 @@ public class CESoundEngine {
 		AL10.alSource3f(buf, AL10.AL_POSITION, attr.pos.x, attr.pos.y, 0);
 		AL10.alSource3f(buf, AL10.AL_VELOCITY, attr.vel.x, attr.vel.y, 0);
 		
-		AL10.alSourcePause(buf);;
+		AL10.alSourcePlay(buf);;
 		playingSounds.add(sd);
 		return sd;
 	}

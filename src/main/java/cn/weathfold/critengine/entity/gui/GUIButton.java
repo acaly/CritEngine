@@ -6,8 +6,8 @@ package cn.weathfold.critengine.entity.gui;
 import cn.weathfold.critengine.scene.Scene;
 
 /**
+ * GUI按钮
  * @author WeAthFolD
- *
  */
 public abstract class GUIButton extends GUIComponent {
 

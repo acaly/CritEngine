@@ -26,7 +26,8 @@ public class CritEngine {
 
 	private static GameTimer timer;
 	private static float aspectRatio = 1.0F;
-	private static int ENFORCE_FPS_RATE = 60;
+	private static int ENFORCE_FPS_RATE = 100;
+	private static boolean state; //窗体状态是否良好
 
 	/**
 	 * 以某一Scene初始化窗体，并开始游戏循环。 客户端程序员有责任设置好Display的其他属性。
@@ -51,14 +52,17 @@ public class CritEngine {
 		switchScene(sc);
 		CEDebugger.fine("Created view window successfully, with scene " + sc);
 		updateDisplayInfo();
+		state = true;
 
-		while (!Display.isCloseRequested()) {
+		while (state) {
 			timer.updateTime();
 			updateCycle();
 			Display.update();
+			
+			state &= !Display.isCloseRequested();
 		}
 
-		Display.destroy();
+		cleanup();
 	}
 
 	public static void updateDisplayInfo() {
@@ -102,7 +106,16 @@ public class CritEngine {
 			disposeCurrentScene();
 		}
 		CEUpdateProcessor.tickState = false;
-		loadScene(another);
+		if(another != null) {
+			loadScene(another);
+		} else {
+			state = false;
+		}
+	}
+	
+	private static void cleanup() {
+		CESoundEngine.cleanup();
+		Display.destroy();
 	}
 
 	/**
@@ -127,6 +140,7 @@ public class CritEngine {
 
 	private static void disposeCurrentScene() {
 		if(!currentScene.keepResourcePool()) {
+			CESoundEngine.refresh();
 			CEResourceHandler.freeResourcePool(currentScene);
 		}
 		currentScene = null;
@@ -134,12 +148,12 @@ public class CritEngine {
 
 	private static void loadScene(Scene sc) {
 		ResourcePool rp = CEResourceHandler.allocatePool(sc);
+		currentScene = sc;
 		CEDebugger.fine("Loading scene " + sc);
 		if(rp != null) {
 			sc.preloadResources(rp);
 		}
 		CEDebugger.fine("Loading scene " + sc + " finished");
-		currentScene = sc;
 	}
 
 	public static float getAspectRatio() {

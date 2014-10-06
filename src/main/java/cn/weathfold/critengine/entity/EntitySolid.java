@@ -16,6 +16,7 @@ public class EntitySolid extends Entity {
 		super(scene, x, y, width, height);
 		AttrCollider collider = new AttrCollider().setAttnRate(0F).setMove(false);
 		this.addAttribute(collider);
+		System.out.println("LOADE " + this);
 	}
 
 }
