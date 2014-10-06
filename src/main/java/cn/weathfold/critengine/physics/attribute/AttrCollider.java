@@ -4,6 +4,7 @@
 package cn.weathfold.critengine.physics.attribute;
 
 import cn.weathfold.critengine.entity.attribute.Attribute;
+import cn.weathfold.critengine.physics.RayTraceResult;
 
 /**
  * @author WeAthFolD
@@ -28,6 +29,15 @@ public class AttrCollider implements Attribute {
 	public AttrCollider setMove(boolean b) {
 		doesMove = b;
 		return this;
+	}
+	
+	/**
+	 * 在碰撞发生时被调用的侦听函数
+	 * @param res
+	 * @return 返回false以阻止速度修改
+	 */
+	public boolean onCollided(RayTraceResult res) {
+		return true;
 	}
 	
 	@Override

@@ -77,11 +77,11 @@ public class ResourcePool {
 	}
 	
 	public int getTexture(String key) {
-		return textureMap.get(key);
+		return textureMap.containsKey(key) ? textureMap.get(key) : 0;
 	}
 	
 	public int getSound(String key) {
-		return soundMap.get(key);
+		return soundMap.containsKey(key) ? soundMap.get(key) : 0;
 	}
 	
 }

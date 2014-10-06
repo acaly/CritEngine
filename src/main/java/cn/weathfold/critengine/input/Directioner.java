@@ -11,7 +11,7 @@ import org.lwjgl.input.Keyboard;
  */
 public class Directioner extends KeyEventProducer {
 	
-	protected int
+	public int
 		dirHorizonal,
 		dirVertical;
 	

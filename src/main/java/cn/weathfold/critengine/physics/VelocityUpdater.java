@@ -29,7 +29,7 @@ public class VelocityUpdater implements IEntityProcessor {
 		long passedTime = CritEngine.getTimer().getElapsedTime();
 		Vector2d newPos = pos.pos.copy();
 		
-		newPos.addVector(vel.vel.x * passedTime, vel.vel.y * passedTime);
+		newPos.addVector(vel.vel.x * passedTime / 1000D, vel.vel.y * passedTime / 1000D);
 		vel.vel.addVector(vel.accelDir.x * vel.gravity * passedTime / 80D, vel.accelDir.y * vel.gravity * passedTime / 80D);
 		
 		AttrCollider ac = (AttrCollider) e.getAttribute("collider");

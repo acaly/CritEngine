@@ -57,6 +57,8 @@ public class CollisionHandler implements IEntityProcessor {
 			rect.expand(r2);
 		}
 		EnumEdgeSide side = alignEntity(e, rect);
+		if(!collider.onCollided(null))
+			return;
 		//反弹
 		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");
 		if(attrVel == null)
@@ -93,6 +95,8 @@ public class CollisionHandler implements IEntityProcessor {
 			return;
 		}
 		//System.out.println(res.edge);
+		if(!collider.onCollided(res))
+			return;
 		//愉快的反弹
 		if(res.edge.dirX != 0)
 			vel.vel.x = Math.abs(vel.vel.x) * res.edge.dirX * collider.attnRate;

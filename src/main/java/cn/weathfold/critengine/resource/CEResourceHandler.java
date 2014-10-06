@@ -38,6 +38,10 @@ public class CEResourceHandler {
 		constantPool.preloadTexture(obj, key);
 	}
 	
+	public static void globalPreloadSound(SoundObject obj, String key) {
+		constantPool.preloadSound(obj, key);
+	}
+	
 	public static int queryTextureId(String key) {
 		Scene sc = CritEngine.getCurrentScene();
 		int id;

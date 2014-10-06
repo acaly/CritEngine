@@ -9,12 +9,14 @@ import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.camera.Camera.Alignment;
 import cn.weathfold.critengine.render.animation.LoopAnimation;
+import cn.weathfold.critengine.resource.CEResourceHandler;
 import cn.weathfold.critengine.resource.PNGTextureObject;
 import cn.weathfold.critengine.resource.ResourcePool;
 import cn.weathfold.critengine.resource.WavSoundObject;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.sound.CESoundEngine;
 import cn.weathfold.critengine.sound.SoundAttributes;
+import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.demo.Type24;
 
 /**
@@ -39,12 +41,14 @@ public class SceneMenu extends Scene {
 	private Random rand = new Random();
 	private boolean played = false;
 	private long lastPlayTick;
+	private static boolean firstLoad = true;
 
 	public SceneMenu() {
-		this.mainCamera = new Camera(this, 0, 0, 512, 512, Alignment.ALIGN_WIDTH); //设置主摄像机
+		this.mainCamera = new Camera(this, -153.5, 0, 819, 512, Alignment.ALIGN_WIDTH); //设置主摄像机
 		elements.add(new EntityTitle(this));
 		elements.add(new ButtonStart(this));
 		elements.add(new ButtonExit(this));
+		
 	}
 	
 	public void renderScene() {
@@ -61,12 +65,23 @@ public class SceneMenu extends Scene {
 	}
 
 	public void preloadResources(ResourcePool pool) {
+		if(firstLoad) {
+			//preload
+			CEResourceHandler.globalPreloadSound(new WavSoundObject(Type24.ASSETS_PATH + "sounds/buttonclick.wav"), Type24.SND_BUTTON_CLICK);
+			CEResourceHandler.globalPreloadSound(new WavSoundObject(Type24.ASSETS_PATH + "sounds/buttonclickrelease.wav"), Type24.SND_BUTTON_RELEASE);
+			//end
+			firstLoad = false;
+		}
+		
 		String anim[] = new String[12];
 		for(int i = 0; i < 12; ++i) {
 			anim[i] = Type24.ASSETS_PATH + "textures/menu/back" + i + ".png";
 		}
 		ANIM_MAIN = pool.preloadTextureArray(PNGTextureObject.readArray(anim), TEX_ANIM);
 		backAnim = new LoopAnimation(ANIM_MAIN) {
+			{
+				this.setDrawingQuad(new Rect(Type24.QUAD_ALIGN, 0, 1 - 2 * Type24.QUAD_ALIGN, 1));
+			}
 			//随机帧
 			protected int nextFrame() {
 				return rand.nextInt(12);

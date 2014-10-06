@@ -3,17 +3,15 @@
  */
 package cn.weathfold.demo.menu;
 
-import org.lwjgl.opengl.Display;
-
 import cn.weathfold.critengine.CritEngine;
-import cn.weathfold.critengine.entity.gui.GUIButton;
 import cn.weathfold.critengine.scene.Scene;
+import cn.weathfold.demo.T24Button;
 
 /**
  * @author WeAthFolD
  *
  */
-public class ButtonExit extends GUIButton {
+public class ButtonExit extends T24Button {
 
 	private String 
 		NORMAL = SceneMenu.TEX_QUIT,
@@ -30,14 +28,6 @@ public class ButtonExit extends GUIButton {
 		super(scene, 10, 12, 220, 40);
 		this.setTexture(NORMAL);
 	}
-
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.entity.gui.GUIButton#onButtonPressed()
-	 */
-	@Override
-	public void onButtonPressed() {
-		CritEngine.switchScene(null);
-	}
 	
 	@Override
 	public void drawEntity() {
@@ -45,16 +35,12 @@ public class ButtonExit extends GUIButton {
 		super.drawEntity();
 	}
 
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.entity.gui.GUIButton#onButtonFrame()
-	 */
 	@Override
 	public void onButtonFrame() {}
 
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.entity.gui.GUIButton#onButtonReleased()
-	 */
 	@Override
-	public void onButtonReleased() {}
+	public void onButtonReleased() {
+		CritEngine.switchScene(null);
+	}
 
 }
