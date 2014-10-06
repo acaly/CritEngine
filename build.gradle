@@ -16,37 +16,47 @@ dependencies{
 
 compileJava.options.encoding = 'UTF-8'
 
-['windows', 'linux', 'osx'].each { platform ->
-  task "${platform}Natives" {
-    inputs.files configurations.compile
-    outputs.dir "$buildDir/natives-$platform"
-    doLast {
-        copy {
-            def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
-                .findAll { it.classifier == "natives-$platform" }
-            artifacts.each { 
-                from zipTree(it.file)
-            }            
-        into "$buildDir/natives-$platform"
-    }
-    }
-  }
-}
+// Application
 
 mainClassName = 'cn.weathfold.demo.Type24'
 
 import org.apache.tools.ant.taskdefs.condition.Os
-
 run {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        println "Running test client on windows."
         systemProperty "java.library.path", "$buildDir/natives-windows"
     } else if (Os.isFamily(Os.FAMILY_MAC)) {
-        println "Running test client on osx."
         systemProperty "java.library.path", "$buildDir/natives-osc"
     } else if (Os.isFamily(Os.FAMILY_UNIX)) {
-        println "Running test client on linux."
         systemProperty "java.library.path", "$buildDir/natives-linux"
+    }
+}
+
+// Native libraries
+
+['windows', 'linux', 'osx'].each { platform ->
+    task "${platform}Natives" {
+        inputs.files configurations.compile
+        outputs.dir "$buildDir/natives-$platform"
+        doLast {
+            copy {
+                def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
+                    .findAll { it.classifier == "natives-$platform" }
+                artifacts.each { 
+                    from zipTree(it.file)
+                }            
+            into "$buildDir/natives-$platform"
+            }
+        }
+    }
+}
+
+eclipse.classpath.file.whenMerged { classpath ->
+    ['windows', 'linux', 'osx'].each { platform ->
+        classpath.entries.findResult({ entry ->
+            if (entry.kind == 'lib' && entry.path.contains('lwjgl') && entry.path.contains("$platform")) {
+                return entry
+            }
+        }).setNativeLibraryLocation("$buildDir/natives-$platform")
     }
 }
 
