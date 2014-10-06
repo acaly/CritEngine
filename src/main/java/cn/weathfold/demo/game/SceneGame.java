@@ -47,7 +47,7 @@ public class SceneGame extends Scene {
 		animNormal,
 		animShooting;
 	
-	public static int SCENE_HEIGHT = 285;
+	public static double SCENE_HEIGHT = 285.0;
 	
 	private long sndPlayTime;
 	
