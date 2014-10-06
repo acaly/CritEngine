@@ -82,7 +82,10 @@ public class EntityPlayer extends Entity {
 		}
 	};
 	
+	double health; //玩家生命值
+	
 	boolean isShooting; //是否在射击
+	boolean isCollided; //是否被实体阻挡
 	
 	long jumpTime;
 	double halfJumpLen; //跳跃时间的长度的一半
@@ -97,6 +100,7 @@ public class EntityPlayer extends Entity {
 		this.addAttribute(velProcess);
 		this.addAttribute(collider);
 		this.setTexture(SceneGame.TEX_EDGE);
+		health = 100;
 	}
 	
 	public void onFrameUpdate() {

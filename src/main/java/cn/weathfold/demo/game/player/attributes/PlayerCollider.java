@@ -11,6 +11,8 @@ import cn.weathfold.critengine.physics.attribute.AttrCollider;
  *
  */
 public class PlayerCollider extends AttrCollider {
+	
+	public boolean thisTickCollided = false;
 
 	/**
 	 * 
@@ -20,6 +22,9 @@ public class PlayerCollider extends AttrCollider {
 	}
 
 	public boolean onCollided(RayTraceResult res) {
+		if(res.collided) {
+			thisTickCollided = true;
+		}
 		return false;
 	}
 }

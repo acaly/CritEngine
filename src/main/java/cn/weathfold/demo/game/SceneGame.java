@@ -17,6 +17,8 @@ import cn.weathfold.critengine.sound.CESoundEngine;
 import cn.weathfold.critengine.sound.SoundAttributes;
 import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.demo.Type24;
+import cn.weathfold.demo.game.obstacle.ObstacleFactory;
+import cn.weathfold.demo.game.obstacle.ObstacleTemplate;
 import cn.weathfold.demo.game.player.EntityPlayer;
 
 /**
@@ -57,7 +59,10 @@ public class SceneGame extends Scene {
 		//this.mainCamera = new KeyControlledCamera(this, -512, 0, 819, 512, Alignment.ALIGN_WIDTH);
 		this.elements.add(mainCamera);
 		this.elements.add(new EntityPlayer(this));
-		this.elements.add(new EntitySolid(this, -1000, 0, 100, 100).setTexture(SceneGame.TEX_DOGE));
+		System.out.println("ObstacleFactory size " + ObstacleFactory.getTemplateCount());
+		ObstacleTemplate doge = ObstacleFactory.getTemplate(0);
+		doge.generate(this, -1024, 30);
+		doge.generate(this, -800, 100);
 	}
 	
 	@Override

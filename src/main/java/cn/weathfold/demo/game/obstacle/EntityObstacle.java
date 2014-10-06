@@ -18,11 +18,12 @@ public class EntityObstacle extends Entity {
 	public final double dps; //每秒伤害输出
 
 	public EntityObstacle(Scene scene, double x, double y, double width,
-			double height, String texture, double zHeight, double dps) {
+			double height, String texture, double zHeight, double dps, boolean hit) {
 		super(scene, x, y, width, height);
 		this.zHeight = zHeight;
 		this.dps = dps;
 		this.setTexture(texture);
+		if(hit)
 		this.addAttribute(new AttrCollider() {
 			{
 				doesMove = false;
