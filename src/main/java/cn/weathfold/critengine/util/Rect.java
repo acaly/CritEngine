@@ -68,6 +68,7 @@ public class Rect {
 		return pos.y + height;
 	}
 	
+	@Override
 	public String toString() {
 		return "[RECT " + pos.x + " " + pos.y + " " + getMaxX() + " " + getMaxY() + "]";
 	}

@@ -6,11 +6,8 @@ package cn.weathfold.critengine.resource;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.opengl.GL11;
-
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.scene.Scene;
-import cn.weathfold.critengine.sound.SoundEmitter;
 
 /**
  * @author WeAthFolD

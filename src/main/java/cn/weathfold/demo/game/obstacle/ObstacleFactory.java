@@ -6,8 +6,6 @@ package cn.weathfold.demo.game.obstacle;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.weathfold.critengine.camera.Camera;
-import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.demo.game.SceneGame;
 
 /**

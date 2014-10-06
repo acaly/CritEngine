@@ -40,16 +40,17 @@ public abstract class Scene {
 	}
 	
 	/**
-	 * 绘制场景。
-	 */
-	public void renderScene() {
-		
-	}
-	
-	/**
-	 * 绘制Scene的固定背景。这层的绘制不受Camera的控制，(0, 0)->(1, 1)的范围将会被映射到整个屏幕上。
+	 * 绘制Scene的固定背景，(0, 0)->(SCREEN WIDTH, SCREEN HEIGHT)的范围将会被映射到整个屏幕上。
 	 */
 	public void renderBackground() {}
+	
+	/**
+	 * 绘制Scene的前景，(0, 0)->(SCREEN WIDTH, SCREEN HEIGHT)的范围将会被映射到整个屏幕上。
+	 */
+	public void renderForeground() {
+		if(mainCamera != null)
+			this.mainCamera.draw();
+	}
 	
 	/**
 	 * 获取在矩形范围内（或穿过）的所有实体。

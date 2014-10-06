@@ -21,6 +21,7 @@ public class PlayerCollider extends AttrCollider {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
 	public boolean onCollided(RayTraceResult res) {
 		if(res.collided) {
 			thisTickCollided = true;

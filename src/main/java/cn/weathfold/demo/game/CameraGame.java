@@ -5,6 +5,8 @@ package cn.weathfold.demo.game;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.camera.Camera;
+import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.critengine.entity.gui.GUIComponent;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.demo.game.player.EntityPlayer;
 
@@ -33,6 +35,11 @@ public class CameraGame extends Camera {
 	
 	private SceneGame getScene() {
 		return (SceneGame) this.sceneObj;
+	}
+	
+	@Override
+	protected boolean drawEntity(Entity e) {
+		return e instanceof GUIComponent || super.drawEntity(e);
 	}
 
 }

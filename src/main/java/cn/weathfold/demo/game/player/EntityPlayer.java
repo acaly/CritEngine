@@ -14,8 +14,6 @@ import cn.weathfold.critengine.input.DirectionerWASD;
 import cn.weathfold.critengine.input.KeyEventProducer;
 import cn.weathfold.critengine.render.CERenderEngine;
 import cn.weathfold.critengine.render.RenderUtils;
-import cn.weathfold.critengine.render.animation.LoopAnimation;
-import cn.weathfold.critengine.render.animation.RandomAnimation;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.demo.game.SceneGame;
@@ -91,6 +89,8 @@ public class EntityPlayer extends Entity {
 	double halfJumpLen; //跳跃时间的长度的一半
 	double jumpHeight, currentHeight; //跳跃高度
 	
+	int ammo = 20;
+	
 	PlayerVel velProcess = new PlayerVel(this);
 	PlayerCollider collider = new PlayerCollider();
 
@@ -103,6 +103,7 @@ public class EntityPlayer extends Entity {
 		health = 100;
 	}
 	
+	@Override
 	public void onFrameUpdate() {
 		velProcess.frameUpdate(); //速度更新
 		directioner.frameUpdate(); //上下键
@@ -151,6 +152,7 @@ public class EntityPlayer extends Entity {
 	}
 	
 	
+	@Override
 	public void drawEntity() {
 		double scaleShadow = 0.5 * (1.0 - (currentHeight / JUMPING_HEIGHT)) + 0.5;
 		Rect pos = this.getGeomProps();
@@ -184,6 +186,22 @@ public class EntityPlayer extends Entity {
 	
 	protected void attemptShoot() {
 		
+	}
+	
+	public double getHealth() {
+		return this.health;
+	}
+	
+	public boolean isAttacked() {
+		return this.isCollided;
+	}
+	
+	public int getAmmo() {
+		return this.ammo;
+	}
+	
+	public void consumeAmmo() {
+		if(--ammo < 0) ammo = 0;
 	}
 	
 	private SceneGame getScene() {

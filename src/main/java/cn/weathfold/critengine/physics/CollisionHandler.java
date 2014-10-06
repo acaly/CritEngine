@@ -57,7 +57,8 @@ public class CollisionHandler implements IEntityProcessor {
 			rect.expand(r2);
 		}
 		EnumEdgeSide side = alignEntity(e, rect);
-		if(!collider.onCollided(null))
+		Entity ce = set.iterator().next();
+		if(!collider.onCollided(new RayTraceResult(side, ce, ce.getGeomProps().pos)))
 			return;
 		//反弹
 		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");

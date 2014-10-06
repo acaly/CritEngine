@@ -28,6 +28,7 @@ public class T24Button extends GUIButton {
 		super(scene, x, y, width, height);
 	}
 	
+	@Override
 	public void onFrameUpdate() {
 		boolean b = this.isMouseInEntity();
 		if(!hovering && b) {

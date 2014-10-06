@@ -69,13 +69,9 @@ public class CEUpdateProcessor {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		
 		GL11.glPushMatrix();
-		GL11.glScalef(Display.getWidth(), Display.getHeight(), 1.0F);
 		activeScene.renderBackground();
+		activeScene.renderForeground();
 		GL11.glPopMatrix();
-		
-		if (activeScene != null) {
-			activeScene.mainCamera.draw();
-		}
 	}
 	
 }

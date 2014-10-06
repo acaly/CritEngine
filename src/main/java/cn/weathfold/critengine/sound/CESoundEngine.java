@@ -6,7 +6,6 @@ package cn.weathfold.critengine.sound;
 import java.nio.FloatBuffer;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
 import org.lwjgl.BufferUtils;

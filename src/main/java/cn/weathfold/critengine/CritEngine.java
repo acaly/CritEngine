@@ -8,9 +8,6 @@ import org.lwjgl.Sys;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-
-import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.resource.CEResourceHandler;
 import cn.weathfold.critengine.resource.ResourcePool;
 import cn.weathfold.critengine.scene.Scene;

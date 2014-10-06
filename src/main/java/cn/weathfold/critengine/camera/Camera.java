@@ -12,7 +12,6 @@ import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.scene.Scene;
-import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.critengine.util.Vector2d;
 
 public class Camera extends Entity {
@@ -85,20 +84,21 @@ public class Camera extends Entity {
 		
 		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
 		//平移到该Camera原点
-		double scale = Display.getWidth() / (double)attr.width;
+		double scale = Display.getWidth() / attr.width;
 		GL11.glScaled(scale, scale, 1F);
 		GL11.glTranslated(-attr.getMinX(), -attr.getMinY(), 0D);
 		
-		sceneObj.renderScene(); 
-		
 		List<Entity> list = this.sceneObj.getRenderEntityList();
 		for(Entity e : list) {
-			AttrGeometry entPos = (AttrGeometry) e.getAttribute("geometry");
-			if(entPos.intersects(attr))
+			if(drawEntity(e))
 				e.drawEntity();
 		}
 		
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
+	}
+	
+	protected boolean drawEntity(Entity e) {
+		return e.getGeomProps().intersects(getGeomProps());
 	}
 }

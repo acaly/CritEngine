@@ -28,6 +28,7 @@ public class RandomAnimation extends LoopAnimation {
 		super(textures);
 	}
 	
+	@Override
 	protected int nextFrame() {
 		return rand.nextInt(texArray.length);
 	}

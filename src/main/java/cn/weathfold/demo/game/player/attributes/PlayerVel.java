@@ -5,7 +5,6 @@ package cn.weathfold.demo.game.player.attributes;
 
 import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
-import cn.weathfold.critengine.physics.VelocityUpdater;
 import cn.weathfold.critengine.physics.attribute.AttrVelocity;
 import cn.weathfold.demo.game.SceneGame;
 import cn.weathfold.demo.game.player.EntityPlayer;

@@ -39,6 +39,7 @@ public abstract class GUIComponent extends Entity {
 		super(scene, x, y, width, height);
 	}
 	
+	@Override
 	public void onFrameUpdate() {
 		guiListener.frameUpdate();
 	}

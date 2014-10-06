@@ -9,7 +9,6 @@ import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.render.CERenderEngine;
 import cn.weathfold.critengine.render.RenderUtils;
-import cn.weathfold.critengine.scene.Scene;
 
 /**
  * @author WeAthFolD
@@ -26,6 +25,7 @@ public class EntityTitle extends Entity {
 		this.setTexture(SceneMenu.TEX_TITLE);
 	}
 	
+	@Override
 	public void drawEntity() {
 		CERenderEngine.bindTexture(textureID);
 		GL11.glPushMatrix(); {

@@ -8,8 +8,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import cn.weathfold.critengine.CritEngine;
-import cn.weathfold.critengine.resource.CEResourceHandler;
-import cn.weathfold.critengine.resource.WavSoundObject;
 import cn.weathfold.demo.menu.SceneMenu;
 
 /**

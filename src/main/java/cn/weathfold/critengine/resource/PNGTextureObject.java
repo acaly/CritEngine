@@ -3,7 +3,6 @@
  */
 package cn.weathfold.critengine.resource;
 
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 

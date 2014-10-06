@@ -55,6 +55,7 @@ public class Vector2d {
 		this.y += y;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if(obj == null || !(obj instanceof Vector2d))
 			return false;

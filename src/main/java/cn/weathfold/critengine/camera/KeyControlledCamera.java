@@ -41,6 +41,7 @@ public class KeyControlledCamera extends Camera {
 		return this;
 	}
 	
+	@Override
 	public void onFrameUpdate() {
 		directioner.frameUpdate();
 		Rect rt = this.getGeomProps();

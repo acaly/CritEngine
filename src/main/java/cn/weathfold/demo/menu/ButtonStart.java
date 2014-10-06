@@ -4,7 +4,6 @@
 package cn.weathfold.demo.menu;
 
 import cn.weathfold.critengine.CritEngine;
-import cn.weathfold.critengine.entity.gui.GUIButton;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.demo.T24Button;
 import cn.weathfold.demo.game.SceneGame;
