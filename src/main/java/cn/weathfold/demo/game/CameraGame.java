@@ -34,5 +34,4 @@ public class CameraGame extends Camera {
 	private SceneGame getScene() {
 		return (SceneGame) this.sceneObj;
 	}
-
 }

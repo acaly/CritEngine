@@ -51,6 +51,8 @@ public class SceneGame extends Scene {
 	
 	private long sndPlayTime;
 	
+	private ObstacleFactory obstacles;
+	
 	/**
 	 * 
 	 */
@@ -59,10 +61,7 @@ public class SceneGame extends Scene {
 		//this.mainCamera = new KeyControlledCamera(this, -512, 0, 819, 512, Alignment.ALIGN_WIDTH);
 		this.elements.add(mainCamera);
 		this.elements.add(new EntityPlayer(this));
-		System.out.println("ObstacleFactory size " + ObstacleFactory.getTemplateCount());
-		ObstacleTemplate doge = ObstacleFactory.getTemplate(0);
-		doge.generate(this, -1024, 30);
-		doge.generate(this, -800, 100);
+		this.obstacles = new ObstacleFactory(this);
 	}
 	
 	@Override
@@ -72,6 +71,7 @@ public class SceneGame extends Scene {
 			sndPlayTime = time;
 			CESoundEngine.playGlobalSound(SND_BGM0, new SoundAttributes(60000));
 		}
+		obstacles.generateTo(mainCamera.getX());
 	}
 	
 	public void gameOver() {
