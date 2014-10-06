@@ -18,7 +18,7 @@ public class ObstacleFactory  {
 
 	private static List<ObstacleTemplate> templateList = new ArrayList<ObstacleTemplate>();
 	
-	{
+	static {
 		//add templates
 		templateList.add(new ObstacleTemplate(80, 80, 30, 20, SceneGame.TEX_DOGE));
 	}
