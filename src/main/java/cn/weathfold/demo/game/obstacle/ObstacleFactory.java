@@ -20,7 +20,7 @@ public class ObstacleFactory  {
 	
 	static {
 		//add templates
-		templateList.add(new ObstacleTemplate(80, 80, 30, 20, SceneGame.TEX_DOGE));
+		templateList.add(new ObstacleTemplate(80, 80, 30, 20, SceneGame.TEX_DOGE, true));
 	}
 	
 	public static ObstacleTemplate getTemplate(int i) {
