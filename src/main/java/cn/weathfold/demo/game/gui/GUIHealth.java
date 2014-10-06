@@ -33,17 +33,16 @@ public class GUIHealth extends GUIComponent {
 	
 	@Override
 	public int getRenderPriority() {
-		return 2;
+		return 3;
 	}
 	
 	@Override
 	public void drawEntity() {
 		int health = (int) player.getHealth();
-		double len = LEN_PRG * (health / 100); //条的长度
+		double len = LEN_PRG * (health / 100D); //条的长度
 		GL11.glPushMatrix(); {
 			GL11.glTranslated(470, 15, 0);
 			GL11.glColor4f(1F, 1F, 1F, 1F);
-			System.out.println("drawing");
 			CERenderEngine.bindTexture(SceneGame.TEX_HPBAR);
 			RenderUtils.renderTexturedQuads(0, 0, 360, 84);
 			
@@ -51,10 +50,10 @@ public class GUIHealth extends GUIComponent {
 			if(player.isAttacked()) {
 				tex = SceneGame.TEX_HP[3];
 			} else {
-				tex = SceneGame.TEX_HP[health / 34];
+				tex = SceneGame.TEX_HP[(100 - health) / 34];
 			}
 			CERenderEngine.bindTexture(tex);
-			RenderUtils.renderTexturedQuads(LEN_PRG + OFFESETX - len, 0, 360, 84, (LEN_PRG + OFFESETX - len) / 2 / 360, 0, 1, 1);
+			RenderUtils.renderTexturedQuads(LEN_PRG + OFFESETX - len, 0, 360, 84, (LEN_PRG + OFFESETX - len) / 360, 0, 1, 1);
 			
 		} GL11.glPopMatrix();
 	}

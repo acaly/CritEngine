@@ -79,7 +79,7 @@ public class Entity {
 	}
 	
 	public int getRenderPriority() {
-		return 1;
+		return 2;
 	}
 	
 	public Attribute getAttribute(String id) {

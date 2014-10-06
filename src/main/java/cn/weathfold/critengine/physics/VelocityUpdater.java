@@ -23,7 +23,7 @@ public class VelocityUpdater implements IEntityProcessor {
 	public void processEntity(Entity e) {
 		AttrGeometry pos = e.getGeomProps();
 		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
-		if(vel == null) return;
+		if(vel == null || !vel.preVelUpdate()) return;
 		
 		//System.out.println("")
 		long passedTime = CritEngine.getTimer().getElapsedTime();

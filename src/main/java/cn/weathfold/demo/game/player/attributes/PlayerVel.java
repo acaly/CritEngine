@@ -27,6 +27,10 @@ public class PlayerVel extends AttrVelocity {
 		this.vel.x = -EntityPlayer.SPEED_CATCHUP;
 		this.gravity = 0;
 	}
+
+	public boolean preVelUpdate() {
+		return !sceneObj.gameOver;
+	}
 	
 	public void frameUpdate() {
 		Camera camera = sceneObj.mainCamera;

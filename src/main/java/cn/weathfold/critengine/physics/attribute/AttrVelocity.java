@@ -37,6 +37,10 @@ public class AttrVelocity implements Attribute {
 		return this;
 	}
 	
+	public boolean preVelUpdate() {
+		return true;
+	}
+	
 	@Override
 	public String getAttributeID() {
 		return "velocity";

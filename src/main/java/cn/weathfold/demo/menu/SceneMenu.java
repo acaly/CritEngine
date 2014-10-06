@@ -26,6 +26,8 @@ import cn.weathfold.demo.Type24;
  *
  */
 public class SceneMenu extends Scene {
+	
+	public static SceneMenu INSTANCE;
 
 	protected static final String SND_BACK = "BGM";
 
@@ -46,7 +48,8 @@ public class SceneMenu extends Scene {
 		elements.add(new EntityTitle(this));
 		elements.add(new ButtonStart(this));
 		elements.add(new ButtonExit(this));
-
+		if(INSTANCE == null)
+			INSTANCE = this;
 	}
 
 	@Override
@@ -110,6 +113,16 @@ public class SceneMenu extends Scene {
 
 		pool.preloadSound(new WavSoundObject(Type24.ASSETS_PATH
 				+ "sounds/menu/bgm.wav"), SND_BACK);
+	}
+	
+	@Override
+	public void onDisposed() {
+		lastPlayTick = 0;
+	}
+	
+	@Override
+	public boolean keepResourcePool() {
+		return true;
 	}
 
 	@Override

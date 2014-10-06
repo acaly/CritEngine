@@ -126,6 +126,11 @@ public abstract class Scene {
 		
 	}
 	
+	/**
+	 * 在场景被切换的时候调用，执行收尾工作。
+	 */
+	public void onDisposed() {}
+	
 	public boolean keepResourcePool() {
 		return false;
 	}

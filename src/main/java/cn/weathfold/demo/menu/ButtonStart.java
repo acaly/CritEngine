@@ -5,6 +5,7 @@ package cn.weathfold.demo.menu;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.scene.Scene;
+import cn.weathfold.critengine.sound.CESoundEngine;
 import cn.weathfold.demo.T24Button;
 import cn.weathfold.demo.game.SceneGame;
 
@@ -35,8 +36,10 @@ public class ButtonStart extends T24Button {
 	 */
 	@Override
 	public void onButtonReleased() {
+		CESoundEngine.refresh(); //停止所有声音
+		
 		super.onButtonReleased();
-		CritEngine.switchScene(new SceneGame());
+		CritEngine.switchScene(SceneGame.INSTANCE == null ? new SceneGame() : SceneGame.INSTANCE);
 	}
 	
 	@Override

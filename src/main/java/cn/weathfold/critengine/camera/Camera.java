@@ -101,6 +101,7 @@ public class Camera extends Entity {
 
 	protected boolean drawEntity(Entity e) {
 		return e.getGeomProps().intersects(getGeomProps());
+	}
 
 	public double getX() {
 		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");

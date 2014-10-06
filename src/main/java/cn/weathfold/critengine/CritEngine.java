@@ -136,10 +136,11 @@ public class CritEngine {
 	}
 
 	private static void disposeCurrentScene() {
+		CESoundEngine.refresh();
 		if(!currentScene.keepResourcePool()) {
-			CESoundEngine.refresh();
 			CEResourceHandler.freeResourcePool(currentScene);
 		}
+		currentScene.onDisposed();
 		currentScene = null;
 	}
 

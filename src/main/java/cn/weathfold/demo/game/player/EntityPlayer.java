@@ -27,7 +27,7 @@ import cn.weathfold.demo.game.player.attributes.PlayerVel;
 public class EntityPlayer extends Entity {
 	
 	public static final double
-		SPEED_NORMAL = 180,
+		SPEED_NORMAL = 200,
 		SPEED_CATCHUP = 300,
 		DEFAULT_SCREEN_OFFSET = 550;
 	public static final double
@@ -54,7 +54,6 @@ public class EntityPlayer extends Entity {
 			if(key == Keyboard.KEY_SPACE) {
 				jumpPressTime = CritEngine.getVirtualTime();
 			} else if(key == MOUSE0) {
-				
 			}
 		}
 
@@ -94,20 +93,30 @@ public class EntityPlayer extends Entity {
 	PlayerVel velProcess = new PlayerVel(this);
 	PlayerCollider collider = new PlayerCollider();
 
-	public EntityPlayer(Scene scene) {
+	public EntityPlayer(SceneGame scene) {
 		super(scene, -256, 100, JUDGEBOX_SIZE, JUDGEBOX_SIZE);
 		
 		this.addAttribute(velProcess);
 		this.addAttribute(collider);
 		this.setTexture(SceneGame.TEX_EDGE);
-		health = 100;
+		health = 80;
+	}
+	
+	public void resetPosition() {
+		AttrGeometry geom = this.getGeomProps();
+		geom.pos.x = -256;
+		geom.pos.y = 100;
 	}
 	
 	@Override
 	public void onFrameUpdate() {
+		
 		velProcess.frameUpdate(); //速度更新
 		directioner.frameUpdate(); //上下键
 		controller.frameUpdate(); //空格和A
+		
+		if(this.getScene().gameOver)
+			return;
 		
 		//如果玩家掉出屏幕……
 		if(!this.getGeomProps().intersects(getScene().mainCamera.getGeomProps())) {
@@ -184,6 +193,10 @@ public class EntityPlayer extends Entity {
 		super.drawEntity();
 	}
 	
+	private SceneGame getScene() {
+		return (SceneGame) sceneObj;
+	}
+	
 	protected void attemptShoot() {
 		
 	}
@@ -204,8 +217,8 @@ public class EntityPlayer extends Entity {
 		if(--ammo < 0) ammo = 0;
 	}
 	
-	private SceneGame getScene() {
-		return (SceneGame) sceneObj;
+	public int getRenderPriority() {
+		return 3;
 	}
 
 }

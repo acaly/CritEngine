@@ -8,6 +8,7 @@ import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.entity.gui.GUIComponent;
 import cn.weathfold.critengine.scene.Scene;
+import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.demo.game.player.EntityPlayer;
 
 /**
@@ -30,7 +31,15 @@ public class CameraGame extends Camera {
 	
 	@Override
 	public void onFrameUpdate() {
+		if(getScene().gameOver)
+			return;
+		
 		this.getGeomProps().pos.x -= EntityPlayer.SPEED_NORMAL * CritEngine.getTimer().getElapsedTime() / 1000D;
+	}
+	
+	public void resetPosition() {
+		Rect rect = this.getGeomProps();
+		rect.pos.x = -512;
 	}
 	
 	private SceneGame getScene() {

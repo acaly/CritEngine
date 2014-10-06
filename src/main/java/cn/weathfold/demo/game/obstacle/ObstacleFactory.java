@@ -7,10 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import cn.weathfold.critengine.entity.IEntityTemplate;
 import cn.weathfold.demo.game.SceneGame;
 
 /**
- * @author WeAthFolD
+ * @author WeAthFolD, acaly
  *
  */
 public class ObstacleFactory  {
@@ -25,21 +26,30 @@ public class ObstacleFactory  {
 	
 	private double lastGenTo;
 	
-	private List<ObstacleTemplate> templateList = new ArrayList<ObstacleTemplate>();
+	private List<IEntityTemplate> templateList = new ArrayList<IEntityTemplate>();
 	private Random rand;
 	
 	public ObstacleFactory(SceneGame scene) {
-		templateList.add(new ObstacleTemplate(scene, 80, 80, 30, 20, SceneGame.TEX_DOGE, true));
+		//templateList.add(new ObstacleTemplate(scene, 80, 80, 30, 20, SceneGame.TEX_DOGE, true));
+		//templateList.add(new ObstacleTemplate(scene, 80, 80, 30, 20, SceneGame.TEX_OBSTACLES[0], true));
 		lastGenTo = GEN_FROM; 
 		rand = new Random();
 	}
 	
-	public ObstacleTemplate getTemplate(int i) {
+	public void resetStat() {
+		lastGenTo = GEN_FROM;
+	}
+	
+	public IEntityTemplate getTemplate(int i) {
 		return templateList.get(i);
 	}
 	
 	public int getTemplateCount() {
 		return templateList.size();
+	}
+	
+	public void addTemplate(IEntityTemplate template) {
+		templateList.add(template);
 	}
 	
 	private double getSpacing(double x) {
@@ -48,17 +58,17 @@ public class ObstacleFactory  {
 	}
 
 	private double generateRange(double fromX, double toX) {
-		System.out.println("Gen range " + Double.toString(fromX) + ", " + Double.toString(toX));
+		//System.out.println("Gen range " + Double.toString(fromX) + ", " + Double.toString(toX));
 		double i;
 		for (i = fromX; i > toX; i -= getSpacing(i)) {
-			getTemplate(0).generate(i, rand.nextDouble() * GEN_HEIGHT + GEN_MIN_Y);
+			getTemplate(rand.nextInt(getTemplateCount())).generate(i, rand.nextDouble() * GEN_HEIGHT + GEN_MIN_Y);
 		}
 		return i;
 	}
 	
 	public void generateTo(double toX) {
 		if (toX - GEN_AHEAD > lastGenTo) return;
-		System.out.println("Current at " + Double.toString(toX));
+		//System.out.println("Current at " + Double.toString(toX));
 		lastGenTo = generateRange(lastGenTo, lastGenTo - GEN_STEP);
 	}
 }
