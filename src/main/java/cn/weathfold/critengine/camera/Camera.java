@@ -101,4 +101,14 @@ public class Camera extends Entity {
 		GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 		GL11.glPopMatrix();
 	}
+	
+	public double getX() {
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		return attr.pos.x;
+	}
+	
+	public double getY() {
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		return attr.pos.y;
+	}
 }
