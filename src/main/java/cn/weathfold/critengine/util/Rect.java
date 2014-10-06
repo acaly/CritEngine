@@ -21,9 +21,8 @@ public class Rect {
 		this.height = h;
 	}
 	
-	public void addPosition(double x, double y) {
-		pos.x += x;
-		pos.y += y;
+	public Rect(Rect r2) {
+		this(r2.pos.x, r2.pos.y, r2.width, r2.height);
 	}
 	
 	/**
@@ -39,7 +38,18 @@ public class Rect {
 	 * 判断一维线段[a, b], [c, d]是否有交集
 	 */
 	private boolean ins(double a, double b, double c, double d) {
-		return (c <= a && d > a) || (c < b);
+		//System.out.println(a + " " + b + " " + c + " " + d + ((c <= a && d > a) || (c < b)));
+		return d <= a ? false : (c < b);
+	}
+	
+	public void expand(Rect r2) {
+		pos.x = Math.min(r2.getMinX(), pos.x);
+		pos.y = Math.min(r2.getMinY(), pos.y);
+		double 
+			maxX = Math.max(getMaxX(), r2.getMaxX()),
+			maxY = Math.max(getMaxY(), r2.getMaxY());
+		width = maxX - pos.x;
+		height = maxY - pos.y;
 	}
 	
 	public double getMinX() {
@@ -56,6 +66,10 @@ public class Rect {
 	
 	public double getMaxY() {
 		return pos.y + height;
+	}
+	
+	public String toString() {
+		return "[RECT " + pos.x + " " + pos.y + " " + getMaxX() + " " + getMaxY() + "]";
 	}
 	
 }

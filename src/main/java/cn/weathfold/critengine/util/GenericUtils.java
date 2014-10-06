@@ -11,10 +11,10 @@ import java.util.Map;
  */
 public class GenericUtils {
 
-	public static <T, U> Map.Entry<T, U> searchByValue(Map<T, U> map, U value) {
+	public static <T, U> T searchByValue(Map<T, U> map, U value) {
 		for(Map.Entry<T, U> ent : map.entrySet()) {
 			if(ent.getValue().equals(value))
-				return ent;
+				return ent.getKey();
 		}
 		return null;
 	}

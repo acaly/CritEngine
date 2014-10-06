@@ -1,7 +1,7 @@
 /**
  * 
  */
-package cn.weathfold.critengine.render;
+package cn.weathfold.critengine.resource;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -30,6 +30,7 @@ public class PNGTextureObject implements TextureObject {
 			height = dec.getHeight();
 			
 			buf = ByteBuffer.allocateDirect(4 * dec.getWidth() * dec.getHeight());
+			
 			dec.decode(buf, dec.getWidth() * 4, Format.RGBA);
 			
 			buf.flip();
@@ -62,6 +63,19 @@ public class PNGTextureObject implements TextureObject {
 	@Override
 	public int getHeight() {
 		return height;
+	}
+	
+	/**
+	 * 读取一个序列的便捷方法
+	 * @param arr
+	 * @return
+	 */
+	public static PNGTextureObject[] readArray(String... arr) {
+		PNGTextureObject res[] = new PNGTextureObject[arr.length];
+		for(int i = 0; i < arr.length; ++i) {
+			res[i] = new PNGTextureObject(arr[i]);
+		}
+		return res;
 	}
 
 }

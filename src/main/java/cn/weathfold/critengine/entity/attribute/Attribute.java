@@ -6,6 +6,6 @@ package cn.weathfold.critengine.entity.attribute;
  */
 public interface Attribute {
 	
-	/* 获取该属性的ID */
-	String getAtttributeID();
+	public String getAttributeID();
+	
 }
