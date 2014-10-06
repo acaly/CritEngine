@@ -37,9 +37,4 @@ public class CameraGame extends Camera {
 		return (SceneGame) this.sceneObj;
 	}
 	
-	@Override
-	protected boolean drawEntity(Entity e) {
-		return e instanceof GUIComponent || super.drawEntity(e);
-	}
-
 }

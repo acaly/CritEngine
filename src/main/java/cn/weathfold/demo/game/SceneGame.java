@@ -50,18 +50,23 @@ public class SceneGame extends Scene {
 		animNormal,
 		animShooting;
 	
-	public static int SCENE_HEIGHT = 285;
+	public static double SCENE_HEIGHT = 285.0;
 	
 	private long sndPlayTime;
 	
 	public EntityPlayer thePlayer;
 	
 	private CameraGameGUI cameraGUI;
+	private ObstacleFactory obstacles;
 	
+	/**
+	 * 
+	 */
 	public SceneGame() {
 		this.mainCamera = new CameraGame(this);
 		//this.mainCamera = new KeyControlledCamera(this, -512, 0, 819, 512, Alignment.ALIGN_WIDTH);
 		this.elements.add(mainCamera);
+		
 		thePlayer = new EntityPlayer(this);
 		elements.add(thePlayer);
 		
@@ -70,6 +75,8 @@ public class SceneGame extends Scene {
 		ObstacleTemplate doge = ObstacleFactory.getTemplate(0);
 		doge.generate(this, -1024, 30);
 		doge.generate(this, -800, 100);
+		
+		this.obstacles = new ObstacleFactory(this);
 	}
 	
 	@Override
@@ -79,6 +86,7 @@ public class SceneGame extends Scene {
 			sndPlayTime = time;
 			CESoundEngine.playGlobalSound(SND_BGM0, new SoundAttributes(60000));
 		}
+		obstacles.generateTo(mainCamera.getX());
 	}
 	
 	public void gameOver() {

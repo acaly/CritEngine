@@ -98,7 +98,18 @@ public class Camera extends Entity {
 		GL11.glPopMatrix();
 	}
 	
+<<<<<<< HEAD
 	protected boolean drawEntity(Entity e) {
 		return e.getGeomProps().intersects(getGeomProps());
+=======
+	public double getX() {
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		return attr.pos.x;
+	}
+	
+	public double getY() {
+		AttrGeometry attr = (AttrGeometry) this.getAttribute("geometry");
+		return attr.pos.y;
+>>>>>>> a547af81ec584674a9c9a1da49ba4d3d7c775d82
 	}
 }

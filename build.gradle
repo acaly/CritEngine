@@ -60,20 +60,14 @@ eclipse.classpath.file.whenMerged { classpath ->
     }
 }
 
-task setupWindows << {
-    build
-    windowsNatives
-    eclipse
+task setupWindows {
+    dependsOn 'build', 'windowsNatives', 'eclipse'
 }
 
-task setupLinux << {
-    build
-    linuxNatives
-    eclipse
+task setupLinux {
+    dependsOn 'build', 'linuxNatives', 'eclipse'
 }
 
-task setupOsx << {
-    build
-    osxNatives
-    eclipse
+task setupOsx {
+    dependsOn 'build', 'osxNatives', 'eclipse'
 }
