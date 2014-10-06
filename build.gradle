@@ -3,51 +3,61 @@ apply plugin: 'eclipse'
 apply plugin: 'application'
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies{
-	compile group: 'org.lwjgl.lwjgl', name: 'lwjgl', version: '2.8.4'
-	compile group: 'org.l33tlabs.twl', name: 'pngdecoder', version: '1.0'
+    compile group: 'org.lwjgl.lwjgl', name: 'lwjgl', version: '2.9.1'
+    compile group: 'org.lwjgl.lwjgl', name: 'lwjgl_util', version: '2.9.1'
+    compile group: 'org.l33tlabs.twl', name: 'pngdecoder', version: '1.0'
+    compile group: 'com.typesafe.slick', name: 'slick_2.11', version: '2.1.0'
+    compile group: 'org.slick2d', name: 'slick2d-core', version:'1.0.1'
 }
 
 compileJava.options.encoding = 'UTF-8'
 
-['windows', 'linux', 'osx'].each { platform ->
-  task "${platform}Natives" {
-    inputs.files configurations.compile
-    outputs.dir "$buildDir/natives-$platform"
-    doLast {
-        copy {
-            def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
-                .findAll { it.classifier == "natives-$platform" }
-            artifacts.each { 
-                from zipTree(it.file)
-            }            
-        into "$buildDir/natives-$platform"
-    }
-    }
-  }
-}
+// Application
 
-mainClassName = 'cn.weathfold.client.ClientRunner'
+mainClassName = 'cn.weathfold.demo.Type24'
 
 import org.apache.tools.ant.taskdefs.condition.Os
-
 run {
     if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        println "Running test client on windows."
-        println "Default path: ${System.getenv('PATH')}"
         systemProperty "java.library.path", "$buildDir/natives-windows"
     } else if (Os.isFamily(Os.FAMILY_MAC)) {
-        println "Running test client on osx."
         systemProperty "java.library.path", "$buildDir/natives-osc"
     } else if (Os.isFamily(Os.FAMILY_UNIX)) {
-        println "Running test client on linux."
-        println "Default lib path: ${System.getenv('LD_LIBRARY_PATH')}"
-        systemProperty "java.library.path", "$buildDir/natives-linux:${System.getenv('LD_LIBRARY_PATH')}"
+        systemProperty "java.library.path", "$buildDir/natives-linux"
     }
-    args 'test'
+}
+
+// Native libraries
+
+['windows', 'linux', 'osx'].each { platform ->
+    task "${platform}Natives" {
+        inputs.files configurations.compile
+        outputs.dir "$buildDir/natives-$platform"
+        doLast {
+            copy {
+                def artifacts = configurations.compile.resolvedConfiguration.resolvedArtifacts
+                    .findAll { it.classifier == "natives-$platform" }
+                artifacts.each { 
+                    from zipTree(it.file)
+                }            
+            into "$buildDir/natives-$platform"
+            }
+        }
+    }
+}
+
+eclipse.classpath.file.whenMerged { classpath ->
+    ['windows', 'linux', 'osx'].each { platform ->
+        classpath.entries.findResult({ entry ->
+            if (entry.kind == 'lib' && entry.path.contains('lwjgl') && entry.path.contains("$platform")) {
+                return entry
+            }
+        }).setNativeLibraryLocation("$buildDir/natives-$platform")
+    }
 }
 
 task setupWindows << {
