@@ -27,11 +27,10 @@ public class ObstacleFactory  {
 	private double lastGenTo;
 	
 	private List<IEntityTemplate> templateList = new ArrayList<IEntityTemplate>();
+	private WeightedRandom weightedRandom = new WeightedRandom();
 	private Random rand;
 	
 	public ObstacleFactory(SceneGame scene) {
-		//templateList.add(new ObstacleTemplate(scene, 80, 80, 30, 20, SceneGame.TEX_DOGE, true));
-		//templateList.add(new ObstacleTemplate(scene, 80, 80, 30, 20, SceneGame.TEX_OBSTACLES[0], true));
 		lastGenTo = GEN_FROM; 
 		rand = new Random();
 	}
@@ -48,8 +47,15 @@ public class ObstacleFactory  {
 		return templateList.size();
 	}
 	
-	public void addTemplate(IEntityTemplate template) {
+	/**
+	 * Add a new template
+	 * @param template 
+	 * @param weight The weight used in weighted random. Don't need to be normalized. 
+	 *  (That is, the sum of weight in each template may not be 1.0.)
+	 */
+	public void addTemplate(IEntityTemplate template, double weight) {
 		templateList.add(template);
+		weightedRandom.addEntry(weight);
 	}
 	
 	private double getSpacing(double x) {
@@ -58,17 +64,16 @@ public class ObstacleFactory  {
 	}
 
 	private double generateRange(double fromX, double toX) {
-		//System.out.println("Gen range " + Double.toString(fromX) + ", " + Double.toString(toX));
 		double i;
 		for (i = fromX; i > toX; i -= getSpacing(i)) {
-			getTemplate(rand.nextInt(getTemplateCount())).generate(i, rand.nextDouble() * GEN_HEIGHT + GEN_MIN_Y);
+			getTemplate(weightedRandom.next(rand.nextDouble()))
+					.generate(i, rand.nextDouble() * GEN_HEIGHT + GEN_MIN_Y);
 		}
 		return i;
 	}
 	
 	public void generateTo(double toX) {
 		if (toX - GEN_AHEAD > lastGenTo) return;
-		//System.out.println("Current at " + Double.toString(toX));
 		lastGenTo = generateRange(lastGenTo, lastGenTo - GEN_STEP);
 	}
 }

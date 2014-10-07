@@ -257,26 +257,42 @@ public class SceneGame extends Scene {
 		};
 		TEX_BULLET = pool.preloadTextureArray(PNGTextureObject.readArray(paths), "bullet");
 		animBullet = new LoopAnimation(TEX_BULLET).setDrawingQuad(new Rect(0, 0, 32, 16));
-		
-		obstacles.addTemplate(new ObstacleTemplate(this, 120, 40, 15, 10, TEX_OBSTACLES[0], true).setRenderProps(-54, 0, 190, 48));
-		obstacles.addTemplate(new ObstacleTemplate(this, 32, 51, 15, 10, TEX_OBSTACLES[1], true).setRenderProps(-33, 0, 66, 52));
-		obstacles.addTemplate(new ObstacleTemplate(this, 67, 44, 15, 10, TEX_OBSTACLES[2], true).setRenderProps(-42, 0, 107, 46));
-		obstacles.addTemplate(new ObstacleTemplate(this, 35, 55, 15, 10, TEX_OBSTACLES[3], true).setRenderProps(-29, 0, 64, 55));
-		obstacles.addTemplate(new ObstacleTemplate(this, 56, 50, 15, 10, TEX_OBSTACLES[4], true).setRenderProps(-32, 0, 88, 50));
-		obstacles.addTemplate(new ObstacleTemplate(this, 38, 58, 15, 10, TEX_OBSTACLES[5], true).setRenderProps(-30, 0, 68, 58));
-		obstacles.addTemplate(new ObstacleTemplate(this, 74, 54, 15, 10, TEX_OBSTACLES[6], true).setRenderProps(-30, 2, 104, 62));
-		obstacles.addTemplate(new ObstacleTemplate(this, 74, 78, 15, 10, TEX_OBSTACLES[7], true).setRenderProps(-38, 0, 112, 78));
-		obstacles.addTemplate(new ObstacleTemplate(this, 74, 78, 15, 10, TEX_OBSTACLES[7], true).setRenderProps(-38, 0, 112, 78));
-		obstacles.addTemplate(new ObstacleTemplate(this, 90, 94, 15, 10, TEX_OBSTACLES[8], true).setRenderProps(-44, 0, 134, 94));
-		obstacles.addTemplate(new ObstacleTemplate(this, 94, 88, 15, 10, TEX_OBSTACLES[9], true).setRenderProps(-38, 0, 132, 88));
-		obstacles.addTemplate(new ObstacleTemplate(this, 110, 72, 15, 10, TEX_OBSTACLES[10], true).setRenderProps(-38, 0, 148, 72));
-		obstacles.addTemplate(new ObstacleTemplate(this, 110, 74, 15, 10, TEX_OBSTACLES[11], true).setRenderProps(-36, 0, 146, 74));
-		obstacles.addTemplate(new ObstacleTemplate(this, 48, 39, 15, 10, TEX_OBSTACLES[12], true).setRenderProps(-25, 0, 73, 39));
-		obstacles.addTemplate(new ObstacleTemplate(this, 96, 56, 15, 10, TEX_OBSTACLES[13], true).setRenderProps(-34, 0, 130, 56));
-		obstacles.addTemplate(new ObstacleTemplate(this, 34, 26, 15, 10, TEX_OBSTACLES[14], false).setRenderProps(-14, 0, 48, 26));
-		obstacles.addTemplate(new ObstacleTemplate(this, 50, 24, 15, 10, TEX_OBSTACLES[15], false));
-		obstacles.addTemplate(new ObstacleTemplate(this, 64, 27, 15, 10, TEX_OBSTACLES[16], false));
-		obstacles.addTemplate(new ObstacleTemplate(this, 43, 39, 15, 10, TEX_OBSTACLES[17], false));
+
+		obstacles.addTemplate(new ObstacleTemplate(this, 120, 40, 15, 10, TEX_OBSTACLES[0], true)
+				.setRenderProps(-54, 0, 190, 48), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 32, 51, 15, 10, TEX_OBSTACLES[1], true)
+				.setRenderProps(-33, 0, 66, 52), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 67, 44, 15, 10, TEX_OBSTACLES[2], true)
+				.setRenderProps(-42, 0, 107, 46), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 35, 55, 15, 10, TEX_OBSTACLES[3], true)
+				.setRenderProps(-29, 0, 64, 55), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 56, 50, 15, 10, TEX_OBSTACLES[4], true)
+				.setRenderProps(-32, 0, 88, 50), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 38, 58, 15, 10, TEX_OBSTACLES[5], true)
+				.setRenderProps(-30, 0, 68, 58), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 74, 54, 15, 10, TEX_OBSTACLES[6], true)
+				.setRenderProps(-30, 2, 104, 62), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 74, 78, 15, 10, TEX_OBSTACLES[7], true)
+				.setRenderProps(-38, 0, 112, 78), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 74, 78, 15, 10, TEX_OBSTACLES[7], true)
+				.setRenderProps(-38, 0, 112, 78), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 90, 94, 15, 10, TEX_OBSTACLES[8], true)
+				.setRenderProps(-44, 0, 134, 94), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 94, 88, 15, 10, TEX_OBSTACLES[9], true)
+				.setRenderProps(-38, 0, 132, 88), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 110, 72, 15, 10, TEX_OBSTACLES[10], true)
+				.setRenderProps(-38, 0, 148, 72), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 110, 74, 15, 10, TEX_OBSTACLES[11], true)
+				.setRenderProps(-36, 0, 146, 74), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 48, 39, 15, 10, TEX_OBSTACLES[12], true)
+				.setRenderProps(-25, 0, 73, 39), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 96, 56, 15, 10, TEX_OBSTACLES[13], true)
+				.setRenderProps(-34, 0, 130, 56), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 34, 26, 15, 10, TEX_OBSTACLES[14], false)
+				.setRenderProps(-14, 0, 48, 26), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 50, 24, 15, 10, TEX_OBSTACLES[15], false), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 64, 27, 15, 10, TEX_OBSTACLES[16], false), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 43, 39, 15, 10, TEX_OBSTACLES[17], false), 1.0);
 	}
 
 }
