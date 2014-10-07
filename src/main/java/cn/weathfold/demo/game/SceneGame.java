@@ -290,9 +290,9 @@ public class SceneGame extends Scene {
 				.setRenderProps(-34, 0, 130, 56), 1.0);
 		obstacles.addTemplate(new ObstacleTemplate(this, 34, 26, 15, 10, TEX_OBSTACLES[14], false)
 				.setRenderProps(-14, 0, 48, 26), 1.0);
-		obstacles.addTemplate(new ObstacleTemplate(this, 50, 24, 15, 10, TEX_OBSTACLES[15], false), 1.0);
-		obstacles.addTemplate(new ObstacleTemplate(this, 64, 27, 15, 10, TEX_OBSTACLES[16], false), 1.0);
-		obstacles.addTemplate(new ObstacleTemplate(this, 43, 39, 15, 10, TEX_OBSTACLES[17], false), 1.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 50, 24, 15, 10, TEX_OBSTACLES[15], false), 6.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 64, 27, 15, 10, TEX_OBSTACLES[16], false), 6.0);
+		obstacles.addTemplate(new ObstacleTemplate(this, 43, 39, 15, 10, TEX_OBSTACLES[17], false), 6.0);
 	}
 
 }

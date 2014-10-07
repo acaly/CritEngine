@@ -59,7 +59,7 @@ public class ObstacleFactory  {
 	}
 	
 	private double getSpacing(double x) {
-		double s = Math.exp(x / 30000.0 + rand.nextDouble() * 0.3) * 300.0;
+		double s = Math.exp(x / 30000.0 + rand.nextDouble() * 0.3) * 200.0;
 		return s + 50.0;
 	}
 
