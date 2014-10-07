@@ -26,9 +26,9 @@ public abstract class Scene {
 	public Camera mainCamera;
 	protected static Random RNG = new Random();
 	
-	protected Set<Entity> elements = new HashSet<Entity>();
+	protected List<Entity> elements = new ArrayList<Entity>();
 
-	public Set<Entity> getSceneEntities() {
+	public List<Entity> getSceneEntities() {
 		return elements;
 	}
 	
@@ -94,7 +94,7 @@ public abstract class Scene {
 	 * 获取需要渲染的实体列表，已经以渲染顺序排序完毕。
 	 */
 	public List<Entity> getRenderEntityList() {
-		Set<Entity> set = getSceneEntities();
+		List<Entity> set = getSceneEntities();
 		if(set == null)
 			return new ArrayList<Entity>();
 		
@@ -129,7 +129,7 @@ public abstract class Scene {
 	/**
 	 * 在场景被切换的时候调用，执行收尾工作。
 	 */
-	public void onDisposed() {}
+	public void onSwitchedScene() {}
 	
 	public boolean keepResourcePool() {
 		return false;

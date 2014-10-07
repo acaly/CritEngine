@@ -8,6 +8,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import cn.weathfold.critengine.CritEngine;
+import cn.weathfold.critengine.render.CERenderEngine;
 import cn.weathfold.demo.menu.SceneMenu;
 
 /**
@@ -37,6 +38,7 @@ public class Type24 {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
+		CERenderEngine.setDefaultFontSize(64);
 		CritEngine.start(new SceneMenu());
 	}
 

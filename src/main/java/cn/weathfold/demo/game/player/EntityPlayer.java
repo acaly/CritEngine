@@ -54,6 +54,8 @@ public class EntityPlayer extends Entity {
 			if(key == Keyboard.KEY_SPACE) {
 				jumpPressTime = CritEngine.getVirtualTime();
 			} else if(key == MOUSE0) {
+				shooter.isShooting = true;
+				shooter.frameUpdate();
 			}
 		}
 
@@ -62,7 +64,7 @@ public class EntityPlayer extends Entity {
 			if(kid == Keyboard.KEY_SPACE) {
 				
 			} else if(kid == MOUSE0) {
-				
+				shooter.frameUpdate();
 			}
 		}
 
@@ -74,24 +76,23 @@ public class EntityPlayer extends Entity {
 				double height = (0.3 + 0.7 * dt / JUMP_CHARGE_TIME) * JUMPING_HEIGHT;
 				attemptJump(height);
 			} else if(kid == MOUSE0) {
-				
+				shooter.isShooting = false;
 			}
 		}
 	};
 	
 	double health; //玩家生命值
-	
-	boolean isShooting; //是否在射击
 	boolean isCollided; //是否被实体阻挡
 	
 	long jumpTime;
 	double halfJumpLen; //跳跃时间的长度的一半
 	double jumpHeight, currentHeight; //跳跃高度
 	
-	int ammo = 20;
+	int ammo = 200;
 	
 	PlayerVel velProcess = new PlayerVel(this);
 	PlayerCollider collider = new PlayerCollider();
+	Shooter shooter = new Shooter(this);
 
 	public EntityPlayer(SceneGame scene) {
 		super(scene, -256, 100, JUDGEBOX_SIZE, JUDGEBOX_SIZE);
@@ -182,7 +183,7 @@ public class EntityPlayer extends Entity {
 			//玩家
 			GL11.glPushMatrix(); {
 				GL11.glTranslated(0, 22 + currentHeight, 0);
-				if(isShooting) {
+				if(shooter.isShooting) {
 					scene.animShooting.draw();
 				} else {
 					scene.animNormal.draw();

@@ -5,6 +5,7 @@ package cn.weathfold.demo.game.player.attributes;
 
 import cn.weathfold.critengine.physics.RayTraceResult;
 import cn.weathfold.critengine.physics.attribute.AttrCollider;
+import cn.weathfold.demo.game.obstacle.EntityObstacle;
 
 /**
  * @author WeAthFolD
@@ -26,6 +27,6 @@ public class PlayerCollider extends AttrCollider {
 		if(res.collided) {
 			thisTickCollided = true;
 		}
-		return false;
+		return res.collidedEntity instanceof EntityObstacle;
 	}
 }

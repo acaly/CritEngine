@@ -116,7 +116,7 @@ public class SceneMenu extends Scene {
 	}
 	
 	@Override
-	public void onDisposed() {
+	public void onSwitchedScene() {
 		lastPlayTick = 0;
 	}
 	

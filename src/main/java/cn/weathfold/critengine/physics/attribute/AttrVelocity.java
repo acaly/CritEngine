@@ -3,6 +3,7 @@
  */
 package cn.weathfold.critengine.physics.attribute;
 
+import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.entity.attribute.Attribute;
 import cn.weathfold.critengine.util.Vector2d;
 
@@ -38,6 +39,10 @@ public class AttrVelocity implements Attribute {
 	}
 	
 	public boolean preVelUpdate() {
+		return true;
+	}
+	
+	public boolean onVelocityChange(Entity target) {
 		return true;
 	}
 	

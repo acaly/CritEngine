@@ -34,7 +34,7 @@ public class AttrCollider implements Attribute {
 	/**
 	 * 在碰撞发生时被调用的侦听函数
 	 * @param res
-	 * @return 返回false以阻止速度修改
+	 * @return 返回false以阻止位置和速度修改
 	 */
 	public boolean onCollided(RayTraceResult res) {
 		return true;

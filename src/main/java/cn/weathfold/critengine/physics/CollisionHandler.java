@@ -50,6 +50,10 @@ public class CollisionHandler implements IEntityProcessor {
 		//System.out.println(set);
 		//System.out.println(e.getGeomProps().getMinX() + ", " + e.getGeomProps().getMinY());
 		Iterator<Entity> iter = set.iterator();
+		Entity ce = set.iterator().next();
+		if(!collider.onCollided(new RayTraceResult(EnumEdgeSide.NONE, ce, ce.getGeomProps().pos)))
+			return;
+		
 		Rect rect = new Rect(iter.next().getGeomProps());
 		//比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
 		while(iter.hasNext()) {
@@ -57,12 +61,10 @@ public class CollisionHandler implements IEntityProcessor {
 			rect.expand(r2);
 		}
 		EnumEdgeSide side = alignEntity(e, rect);
-		Entity ce = set.iterator().next();
-		if(!collider.onCollided(new RayTraceResult(side, ce, ce.getGeomProps().pos)))
-			return;
+		
 		//反弹
 		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");
-		if(attrVel == null)
+		if(attrVel == null || !attrVel.onVelocityChange(ce))
 			return;
 		if(side.dirX != 0)
 			attrVel.vel.x = Math.abs(attrVel.vel.x) * side.dirX * collider.attnRate;
@@ -96,7 +98,7 @@ public class CollisionHandler implements IEntityProcessor {
 			return;
 		}
 		//System.out.println(res.edge);
-		if(!collider.onCollided(res))
+		if(!collider.onCollided(res) || !vel.onVelocityChange(res.collidedEntity))
 			return;
 		//愉快的反弹
 		if(res.edge.dirX != 0)

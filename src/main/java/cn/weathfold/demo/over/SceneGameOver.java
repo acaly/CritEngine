@@ -14,6 +14,7 @@ import cn.weathfold.critengine.resource.PNGTextureObject;
 import cn.weathfold.critengine.resource.ResourcePool;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.demo.Type24;
+import cn.weathfold.demo.game.SceneGame;
 import cn.weathfold.demo.menu.SceneMenu;
 
 /**
@@ -55,8 +56,11 @@ public class SceneGameOver extends Scene {
 		}
 		
 	};
+	
+	SceneGame gameScene;
 
-	public SceneGameOver() {
+	public SceneGameOver(SceneGame scene) {
+		gameScene = scene;
 	}
 	
 	public void setScore(int i) {
@@ -85,6 +89,12 @@ public class SceneGameOver extends Scene {
 			CERenderEngine.bindTexture(TEX_MAIN);
 			RenderUtils.renderTexturedQuads(0 + 153.5, 0, 512 + 153.5, 512);
 			
+			final float sz = 60;
+			CERenderEngine.switchFont("Coppplate Gothic Bold");
+			String str = String.valueOf(gameScene.currentScore);
+			double len = CERenderEngine.getStringLength(str, sz);
+			CERenderEngine.drawString(409.5 - len / 2, 250, str, sz);
+			
 			info.drawEntity();
 		} GL11.glPopMatrix();
 	}
@@ -92,6 +102,7 @@ public class SceneGameOver extends Scene {
 	public void preloadResources(ResourcePool pool) {
 		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH + "textures/over/main.png"), TEX_MAIN);
 		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH + "textures/over/info.png"), TEX_INFO);
+		CERenderEngine.preloadFont("Copperplate Gothic Bold");
 	}
 
 }

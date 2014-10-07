@@ -4,6 +4,7 @@
 package cn.weathfold.demo.game;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.input.KeyEventProducer;
@@ -20,6 +21,7 @@ import cn.weathfold.critengine.sound.SoundAttributes;
 import cn.weathfold.critengine.util.Rect;
 import cn.weathfold.demo.Type24;
 import cn.weathfold.demo.game.gui.GUIHealth;
+import cn.weathfold.demo.game.misc.EntityBullet;
 import cn.weathfold.demo.game.obstacle.ObstacleFactory;
 import cn.weathfold.demo.game.obstacle.ObstacleTemplate;
 import cn.weathfold.demo.game.player.EntityPlayer;
@@ -51,21 +53,24 @@ public class SceneGame extends Scene {
 		TEX_PLAYER_FIRE[],
 		TEX_PLAYER[],
 		TEX_HP[],
-		TEX_OBSTACLES[];
+		TEX_OBSTACLES[],
+		TEX_BULLET[];
 	
 	public LoopAnimation 
 		animNormal,
-		animShooting;
+		animShooting,
+		animBullet;
 	
 	public static double SCENE_HEIGHT = 285.0;
 	
 	private long sndPlayTime;
+	public int currentScore;
 	
 	public EntityPlayer thePlayer;
 	
 	private CameraGameGUI cameraGUI;
 	private ObstacleFactory obstacles;
-	private SceneGameOver overScene = new SceneGameOver();
+	private SceneGameOver overScene = new SceneGameOver(this);
 	private GUIHealth guiHealth;
 	
 	public boolean gameOver = false;
@@ -101,16 +106,14 @@ public class SceneGame extends Scene {
 	 */
 	public SceneGame() {
 		this.mainCamera = new CameraGame(this);
-		//this.mainCamera = new KeyControlledCamera(this, -512, 0, 819, 512, Alignment.ALIGN_WIDTH);
 		
 		thePlayer = new EntityPlayer(this);
-		elements.add(mainCamera);
-		elements.add(thePlayer);
 		guiHealth = new GUIHealth(this);
-		
 		cameraGUI = new CameraGameGUI(this);
-		
+		new EntityBullet(this, thePlayer);
 		this.obstacles = new ObstacleFactory(this);
+		
+		this.onSwitchedScene();
 		if(INSTANCE == null)
 			INSTANCE = this;
 	}
@@ -118,6 +121,7 @@ public class SceneGame extends Scene {
 	@Override
 	public void frameUpdate() {
 		long time = CritEngine.getVirtualTime();
+		currentScore = (314) * (int) (-512 - mainCamera.getGeomProps().pos.x);
 		keyListener.frameUpdate();
 		
 		if(gameOver) {
@@ -161,6 +165,7 @@ public class SceneGame extends Scene {
 	
 	@Override
 	public void renderForeground() {
+		
 		super.renderForeground();
 		cameraGUI.draw();
 		
@@ -176,7 +181,7 @@ public class SceneGame extends Scene {
 	}
 	
 	@Override
-	public void onDisposed() {
+	public void onSwitchedScene() {
 		System.out.println("OnDisposed");
 		sndPlayTime = 0;
 		gameOver = false;
@@ -188,6 +193,7 @@ public class SceneGame extends Scene {
 		elements.add(thePlayer);
 		elements.add(mainCamera);
 		elements.add(guiHealth);
+		this.currentScore = 0;
 	}
 	
 	@Override
@@ -244,6 +250,13 @@ public class SceneGame extends Scene {
 			paths[i] = Type24.ASSETS_PATH + "textures/game/obstacles/" + i + ".png";
 		}
 		TEX_OBSTACLES = pool.preloadTextureArray(PNGTextureObject.readArray(paths), "obstacle");
+		
+		paths = new String[1];
+		for(int i = 0; i < 1; ++i) {
+			paths[i] = Type24.ASSETS_PATH + "textures/game/bullet.png";
+		};
+		TEX_BULLET = pool.preloadTextureArray(PNGTextureObject.readArray(paths), "bullet");
+		animBullet = new LoopAnimation(TEX_BULLET).setDrawingQuad(new Rect(0, 0, 32, 16));
 		
 		obstacles.addTemplate(new ObstacleTemplate(this, 120, 40, 15, 10, TEX_OBSTACLES[0], true).setRenderProps(-54, 0, 190, 48));
 		obstacles.addTemplate(new ObstacleTemplate(this, 32, 51, 15, 10, TEX_OBSTACLES[1], true).setRenderProps(-33, 0, 66, 52));

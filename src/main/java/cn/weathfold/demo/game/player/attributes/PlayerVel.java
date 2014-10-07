@@ -4,9 +4,11 @@
 package cn.weathfold.demo.game.player.attributes;
 
 import cn.weathfold.critengine.camera.Camera;
+import cn.weathfold.critengine.entity.Entity;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.physics.attribute.AttrVelocity;
 import cn.weathfold.demo.game.SceneGame;
+import cn.weathfold.demo.game.obstacle.EntityObstacle;
 import cn.weathfold.demo.game.player.EntityPlayer;
 
 /**
@@ -30,6 +32,11 @@ public class PlayerVel extends AttrVelocity {
 
 	public boolean preVelUpdate() {
 		return !sceneObj.gameOver;
+	}
+	
+	@Override
+	public boolean onVelocityChange(Entity target) {
+		return false;
 	}
 	
 	public void frameUpdate() {

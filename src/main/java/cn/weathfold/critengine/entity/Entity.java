@@ -78,8 +78,12 @@ public class Entity {
 		}
 	}
 	
+	public void attackEntity(Entity ent, int damage) {
+		//Do nothing by default
+	}
+	
 	public int getRenderPriority() {
-		return 2;
+		return 0;
 	}
 	
 	public Attribute getAttribute(String id) {

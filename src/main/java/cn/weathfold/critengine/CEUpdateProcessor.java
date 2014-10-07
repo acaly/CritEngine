@@ -5,6 +5,7 @@ package cn.weathfold.critengine;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.lwjgl.opengl.Display;
@@ -42,11 +43,12 @@ public class CEUpdateProcessor {
 			return;
 		}
 		
-		Iterator<Entity> iter = activeScene.getSceneEntities().iterator();
-		while(iter.hasNext()) {
-			Entity e = iter.next();
+		List<Entity> list = activeScene.getSceneEntities();
+		for(int i = 0; i < list.size(); ++i) {
+			Entity e = list.get(i);
 			if(e.deathFlag) {
-				iter.remove(); //回收实体
+				i--;
+				list.remove(e); //回收实体 TODO:在ArrayList中大量删除是低效的，如何解决？
 				continue;
 			}
 			

@@ -140,7 +140,7 @@ public class CritEngine {
 		if(!currentScene.keepResourcePool()) {
 			CEResourceHandler.freeResourcePool(currentScene);
 		}
-		currentScene.onDisposed();
+		currentScene.onSwitchedScene();
 		currentScene = null;
 	}
 

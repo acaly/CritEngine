@@ -51,16 +51,33 @@ public class CERenderEngine {
 		currentFont = font2;
 	}
 	
+	public static void setDefaultFontSize(int f) {
+		DEFAULT_FONT_SIZE = f;
+	}
+	
 	public static void switchFont(String fontName) {
+		TrueTypeFont font = preloadFont(fontName);
+		currentFont = font;
+	}
+	
+	public static TrueTypeFont preloadFont(String fontName) {
 		TrueTypeFont font = fontMap.get(fontName);
 		if(font == null) {
 			font = new TrueTypeFont(new Font(fontName, Font.PLAIN, DEFAULT_FONT_SIZE), false);
 			fontMap.put(fontName, font);
 		}
-		currentFont = font;
+		return font;
 	}
 	
-	public static void drawString(float x, float y, String s, float size) {
+	public static double getStringLength(String s) {
+		return getStringLength(s, DEFAULT_FONT_SIZE);
+	}
+	
+	public static double getStringLength(String s, float size) {
+		return currentFont.getWidth(s) * size / DEFAULT_FONT_SIZE;
+	}
+	
+	public static void drawString(double x, double y, String s, float size) {
 		try {
 			Texture tex = (Texture) fieldFontTexture.get(currentFont);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, tex.getTextureID());
@@ -69,13 +86,13 @@ public class CERenderEngine {
 		}
 		float scale = size / DEFAULT_FONT_SIZE;
 		GL11.glPushMatrix();
-		GL11.glTranslatef(x, y, 0);
+		GL11.glTranslated(x, y, 0);
 		GL11.glScalef(scale, -scale, scale);
 		currentFont.drawString(0, 0, s, Color.white);
 		GL11.glPopMatrix();
 	}
 	
-	public static void drawString(float x, float y, String s) {
+	public static void drawString(double x, double y, String s) {
 		drawString(x, y, s, DEFAULT_FONT_SIZE);
 	}
 	

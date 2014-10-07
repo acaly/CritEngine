@@ -3,7 +3,9 @@
  */
 package cn.weathfold.demo.game.player;
 
+import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.entity.Entity;
+import cn.weathfold.demo.game.misc.EntityBullet;
 
 /**
  * @author WeAthFolD
@@ -12,18 +14,22 @@ import cn.weathfold.critengine.entity.Entity;
 public class Shooter {
 	
 	Entity entity;
+	static final int DEFAULT_SHOOT_INTERVAL = 300;
 	
 	long lastShootTime;
-	boolean isPlayer;
-	boolean isShooting;
+	public final boolean isPlayer;
+	public boolean isShooting;
+	int shootInterval;
 
 	public Shooter(EntityPlayer ent) {
 		entity = ent;
+		shootInterval = DEFAULT_SHOOT_INTERVAL;
 		isPlayer = true;
 	}
 	
 	public Shooter(Entity ent, int shootInterval) {
 		entity = ent;
+		this.shootInterval = shootInterval;
 		isPlayer = false;
 	}
 	
@@ -44,7 +50,15 @@ public class Shooter {
 	}
 	
 	private void shoot() {
-		
+		long time = CritEngine.getVirtualTime();
+		if(lastShootTime == 0 || time - lastShootTime > shootInterval) {
+			System.out.println("Attempting to shoot once");
+			if(ammoSufficient()) {
+				lastShootTime = time;
+				consumeAmmo();
+				entity.sceneObj.spawnEntity(new EntityBullet(entity.sceneObj, entity));
+			}
+		}
 	}
 	
 	public boolean ammoSufficient() {
