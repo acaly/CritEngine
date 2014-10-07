@@ -16,7 +16,7 @@ import cn.weathfold.demo.game.SceneGame;
  */
 public class ObstacleFactory  {
 
-	private static final double GEN_FROM = 0;
+	private static final double GEN_FROM = -800.0;
 	private static final double GEN_AHEAD = 20000.0;
 	private static final double GEN_STEP = 10000.0;
 
@@ -59,7 +59,7 @@ public class ObstacleFactory  {
 	}
 	
 	private double getSpacing(double x) {
-		double s = Math.exp(x / 30000.0 + rand.nextDouble() * 0.3) * 400.0;
+		double s = Math.exp(x / 30000.0 + rand.nextDouble() * 0.3) * 300.0;
 		return s + 50.0;
 	}
 
