@@ -1,6 +1,5 @@
 apply plugin:'java'
 apply plugin: 'eclipse'
-apply plugin: 'application'
 
 repositories {
     mavenCentral()
@@ -15,21 +14,6 @@ dependencies{
 }
 
 compileJava.options.encoding = 'UTF-8'
-
-// Application
-
-mainClassName = 'cn.weathfold.demo.Type24'
-
-import org.apache.tools.ant.taskdefs.condition.Os
-run {
-    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-        systemProperty "java.library.path", "$buildDir/natives-windows"
-    } else if (Os.isFamily(Os.FAMILY_MAC)) {
-        systemProperty "java.library.path", "$buildDir/natives-osc"
-    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
-        systemProperty "java.library.path", "$buildDir/natives-linux"
-    }
-}
 
 // Native libraries
 
@@ -59,6 +43,58 @@ eclipse.classpath.file.whenMerged { classpath ->
         }).setNativeLibraryLocation("$buildDir/natives-$platform")
     }
 }
+
+// Jar
+
+jar {
+    //Create a jar with dependencies
+    //Excluding native libraries (can't be loaded in jar)
+    manifest { attributes 'Main-Class': 'cn.weathfold.demo.Type24' }
+    from configurations.compile.collect {
+        it.getName().contains('native') ? files() : 
+            it.isDirectory() ? it : zipTree(it)
+    }
+}
+
+apply plugin: 'gradle-one-jar'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
+
+['windows', 'linux', 'osx'].each { platform ->
+    task "${platform}OneJar"(type: OneJar) {
+        mainClass = 'cn.weathfold.demo.Type24'
+        //Add native libraries
+        ext.binLib = files()
+        configurations.compile.resolvedConfiguration.resolvedArtifacts
+            .findAll { it.classifier == "natives-windows" }.each{
+                ext.binLib = ext.binLib + zipTree(it.file)
+            }
+    }
+}
+
+// Application
+
+apply plugin: 'application'
+
+import org.apache.tools.ant.taskdefs.condition.Os
+run {
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+        systemProperty "java.library.path", "$buildDir/natives-windows"
+    } else if (Os.isFamily(Os.FAMILY_MAC)) {
+        systemProperty "java.library.path", "$buildDir/natives-osc"
+    } else if (Os.isFamily(Os.FAMILY_UNIX)) {
+        systemProperty "java.library.path", "$buildDir/natives-linux"
+    }
+}
+
+// Setup tasks
 
 task setupWindows {
     dependsOn 'build', 'windowsNatives', 'eclipse'
