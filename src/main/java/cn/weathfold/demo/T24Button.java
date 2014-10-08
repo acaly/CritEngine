@@ -5,48 +5,50 @@ import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.sound.CESoundEngine;
 import cn.weathfold.critengine.sound.SoundAttributes;
 
-public class T24Button extends GUIButton
-{
-  private boolean hovering = true;
-  String texHovering;
-  String texNormal;
+/**
+ * 通用的按钮基类
+ * @author WeAthFolD
+ */
+public class T24Button extends GUIButton {
+	
+	private boolean hovering = true; //鼠标是否在按钮上
+	String texHovering; //鼠标在按钮上的贴图
+	String texNormal; //正常状态的贴图
 
-  public T24Button(Scene scene, double x, double y, double width, double height, String texture0, String texture1)
-  {
-    super(scene, x, y, width, height);
-    this.texNormal = texture0;
-    this.texHovering = texture1;
-    setTexture(this.texNormal);
-  }
+	public T24Button(Scene scene, double x, double y, double width,
+			double height, String texture0, String texture1) {
+		super(scene, x, y, width, height);
+		
+		this.texNormal = texture0;
+		this.texHovering = texture1;
+		setTexture(this.texNormal);
+	}
 
-  public void onFrameUpdate()
-  {
-    boolean b = isMouseInEntity();
-    if ((!this.hovering) && (b)) {
-      CESoundEngine.playGlobalSound("btnclick", new SoundAttributes(100));
-    }
-    this.hovering = b;
+	@Override
+	public void onFrameUpdate() {
+		boolean b = isMouseInEntity();
+		if ((!this.hovering) && (b)) {
+			CESoundEngine.playGlobalSound(Type24.SND_BUTTON_CLICK, new SoundAttributes(100));
+		}
+		this.hovering = b;
 
-    super.onFrameUpdate();
-  }
+		super.onFrameUpdate();
+	}
 
-  public void onButtonPressed()
-  {
-    CESoundEngine.playGlobalSound("/assets/type24/btnrelease", new SoundAttributes(300));
-  }
+	@Override
+	public void onButtonPressed() { }
 
-  public void onButtonFrame()
-  {
-  }
+	@Override
+	public void onButtonFrame() { }
 
-  public void onButtonReleased()
-  {
-    CESoundEngine.playGlobalSound("/assets/type24/btnrelease", new SoundAttributes(300));
-  }
+	@Override
+	public void onButtonReleased() {
+		CESoundEngine.playGlobalSound(Type24.SND_BUTTON_RELEASE, new SoundAttributes(300));
+	}
 
-  public void drawEntity()
-  {
-    this.textureID = (this.hovering ? this.texHovering : this.texNormal);
-    super.drawEntity();
-  }
+	@Override
+	public void drawEntity() {
+		this.textureID = (this.hovering ? this.texHovering : this.texNormal);
+		super.drawEntity();
+	}
 }

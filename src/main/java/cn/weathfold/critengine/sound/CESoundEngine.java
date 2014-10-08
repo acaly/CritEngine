@@ -2,7 +2,6 @@ package cn.weathfold.critengine.sound;
 
 import cn.weathfold.critengine.CEDebugger;
 import cn.weathfold.critengine.CritEngine;
-import cn.weathfold.critengine.camera.Camera;
 import cn.weathfold.critengine.entity.attribute.AttrGeometry;
 import cn.weathfold.critengine.resource.CEResourceHandler;
 import cn.weathfold.critengine.scene.Scene;
@@ -13,32 +12,28 @@ import java.util.Set;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.AL10;
-import org.lwjgl.util.vector.Vector2f;
 
+/**
+ * 声音引擎，AL代码的包装，允许在任意时刻以简单的方法在场景中总播放声音。
+ * 还没有完成。速度等功能暂不支持。
+ * @author WeAthFolD
+ */
 public class CESoundEngine {
-	private static float distanceScale = 0.005F;
 
-	private static FloatBuffer listenerPos = BufferUtils.createFloatBuffer(3)
-			.put(new float[] { 0.0F, 0.0F, 0.0F });
-	private static FloatBuffer listenerVel = BufferUtils.createFloatBuffer(3)
-			.put(new float[] { 0.0F, 0.0F, 0.0F });
-	private static FloatBuffer listenerOri = BufferUtils.createFloatBuffer(3)
-			.put(new float[] { 0.0F, 0.0F, 0.0F });
+	private static FloatBuffer 
+		listenerPos = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0F, 0.0F, 0.0F }), //侦听位置
+		listenerVel = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0F, 0.0F, 0.0F }), //侦听速度
+		listenerOri = BufferUtils.createFloatBuffer(3).put(new float[] { 0.0F, 0.0F, 0.0F }); //侦听朝向
 
-	private static Set<SourceData> playingSounds = new HashSet<SourceData>();
+	private static Set<SourceData> playingSounds = new HashSet<SourceData>(); //存放播放音源的表
 
-	private static int UPDATE_INTV = 2000;
+	private static int UPDATE_INTV = 2000; //检查并删除音源的间隔
 
 	private static long lastUpdateTime = CritEngine.getVirtualTime();
 
-	public static void setDistScale(float f) {
-		distanceScale = f;
-	}
-
-	public static float getDistScale() {
-		return distanceScale;
-	}
-
+	/**
+	 * 在切换场景时调用，刷新播放数据库等。
+	 */
 	public static void refresh() {
 		for (SourceData src : playingSounds) {
 			AL10.alSourceStop(src.sourceID);
@@ -47,6 +42,9 @@ public class CESoundEngine {
 		playingSounds.clear();
 	}
 
+	/**
+	 * 启动加载
+	 */
 	public static void init() {
 		try {
 			AL.create();
@@ -55,10 +53,19 @@ public class CESoundEngine {
 		}
 	}
 
+	/**
+	 * 关闭时的清理
+	 */
 	public static void cleanup() {
 		AL.destroy();
 	}
 
+	/**
+	 * 播放全局声音（始终在listener中央）
+	 * @param key 声音id
+	 * @param attr 声音属性
+	 * @return 生成的音源
+	 */
 	public static SourceData playGlobalSound(String key, SoundAttributes attr) {
 		int sid = CEResourceHandler.querySoundId(key);
 
@@ -82,6 +89,12 @@ public class CESoundEngine {
 		return sd;
 	}
 
+	/**
+	 * 播放一个世界中的声音
+	 * @param key 声音id
+	 * @param attr 声音属性
+	 * @return 生成的音源
+	 */
 	public static SourceData playSound(String key, SoundEmitter attr) {
 		int sid = CEResourceHandler.querySoundId(key);
 		if (sid == 0) {
@@ -91,8 +104,6 @@ public class CESoundEngine {
 		}
 
 		int buf = AL10.alGenSources();
-		attr.pos.x *= distanceScale;
-		attr.pos.y *= distanceScale;
 		SourceData sd = new SourceData(true, attr, buf, attr.lifeTime);
 
 		AL10.alSourcei(buf, 4105, sid);
@@ -124,6 +135,9 @@ public class CESoundEngine {
 		AL10.alSourcePause(data.sourceID);
 	}
 
+	/**
+	 * 每帧更新
+	 */
 	public static void frameUpdate() {
 		listenerPos.clear();
 		Scene scene = CritEngine.getCurrentScene();
@@ -137,10 +151,8 @@ public class CESoundEngine {
 					.getAttribute("geometry");
 			listenerPos
 					.put(new float[] {
-							(float) (pos.getMinX() + pos.width / 2.0D)
-									* distanceScale,
-							(float) (pos.getMinY() + pos.height / 2.0D)
-									* distanceScale, 0.0F });
+							(float) (pos.getMinX() + pos.getWidth() / 2.0D),
+							(float) (pos.getMinY() + pos.getHeight() / 2.0D), 0.0F });
 		}
 
 		AL10.alListener3f(4100, listenerPos.get(0), listenerPos.get(1),

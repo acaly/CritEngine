@@ -12,11 +12,12 @@ import cn.weathfold.critengine.scene.Scene;
  */
 public class EntitySolid extends Entity {
 
-	public EntitySolid(Scene scene, double x, double y, double width, double height) {
+	public EntitySolid(Scene scene, double x, double y, double width,
+			double height) {
 		super(scene, x, y, width, height);
-		AttrCollider collider = new AttrCollider().setAttnRate(0F).setMove(false);
+		AttrCollider collider = new AttrCollider().setAttnRate(0F).setMove(
+				false);
 		this.addAttribute(collider);
-		System.out.println("LOADE " + this);
 	}
 
 }

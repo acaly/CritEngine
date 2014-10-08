@@ -21,16 +21,13 @@ public class CritEngine {
 
 	private static Scene currentScene = null; // 当前窗体的Scene
 
-	private static GameTimer timer;
-	private static float aspectRatio = 1.0F;
-	private static int ENFORCE_FPS_RATE = 100;
-	private static boolean state; //窗体状态是否良好
+	private static GameTimer timer; //全局计时器
+	private static float aspectRatio = 1.0F; //当前窗体宽高比
+	private static int ENFORCE_FPS_RATE = -1; //强制FPS TODO:现在的时序控制好像有点问题，待检查
+	private static boolean state; // 窗体状态是否良好
 
 	/**
 	 * 以某一Scene初始化窗体，并开始游戏循环。 客户端程序员有责任设置好Display的其他属性。
-	 * 
-	 * @param dm
-	 *            显示模式
 	 * @param sc
 	 */
 	public static void start(Scene sc) {
@@ -55,47 +52,16 @@ public class CritEngine {
 			timer.updateTime();
 			updateCycle();
 			Display.update();
-			
+
 			state &= !Display.isCloseRequested();
 		}
 
 		cleanup();
 	}
-
-	public static void updateDisplayInfo() {
-		setAspectRatio((float)Display.getWidth() / Display.getHeight());
-		if(currentScene != null) {
-			currentScene.mainCamera.refreshStat();
-		}
-	}
-
-	private static void initGLProps() {
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0, Display.getWidth(), 0.0, Display.getHeight(), 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		GL11.glDepthFunc(GL11.GL_ALWAYS);
-	}
-
-	/**
-	 * 获取全局的虚拟时间
-	 */
-	public static long getVirtualTime() {
-		return timer == null ? (Sys.getTime() * 1000) / Sys.getTimerResolution() : timer.getTime();
-	}
-
-	/**
-	 * 获取全局计时器
-	 * 
-	 * @return
-	 */
-	public static GameTimer getTimer() {
-		return timer;
-	}
 	
 	/**
 	 * 切换到另外一个Scene
+	 * 注意：切换到null会导致程序退出
 	 * @param another
 	 */
 	public static void switchScene(Scene another) {
@@ -103,16 +69,37 @@ public class CritEngine {
 			disposeCurrentScene();
 		}
 		CEUpdateProcessor.tickState = false;
-		if(another != null) {
+		if (another != null) {
 			loadScene(another);
 		} else {
 			state = false;
 		}
 	}
-	
-	private static void cleanup() {
-		CESoundEngine.cleanup();
-		Display.destroy();
+
+	/**
+	 * 更新显示相关信息，在进行了窗口大小的调整以后被调用。
+	 */
+	public static void updateDisplayInfo() {
+		setAspectRatio((float) Display.getWidth() / Display.getHeight());
+		if (currentScene != null) {
+			currentScene.mainCamera.refreshStat();
+		}
+	}
+
+	/**
+	 * 获取全局的虚拟时间
+	 */
+	public static long getVirtualTime() {
+		return timer == null ? (Sys.getTime() * 1000)
+				/ Sys.getTimerResolution() : timer.getTime();
+	}
+
+	/**
+	 * 获取全局计时器
+	 * @return
+	 */
+	public static GameTimer getTimer() {
+		return timer;
 	}
 
 	/**
@@ -123,43 +110,85 @@ public class CritEngine {
 	public static Scene getCurrentScene() {
 		return currentScene;
 	}
+	
+	/**
+	 * 获取宽高比
+	 */
+	public static float getAspectRatio() {
+		return aspectRatio;
+	}
+	
+	/**
+	 * 设置固定帧率
+	 */
+	public static void setEnforceFPS(int rate) {
+		ENFORCE_FPS_RATE = rate;
+	}
 
 	/**
 	 * 每帧更新。
 	 */
 	private static void updateCycle() {
-		//强制FPS同步
-		Display.sync(ENFORCE_FPS_RATE);
+		// 强制FPS同步
+		if(ENFORCE_FPS_RATE > 0)
+			Display.sync(ENFORCE_FPS_RATE);
 		timer.updateTime();
-		
+
 		CEUpdateProcessor.frameUpdate(currentScene);
 	}
 
+	/**
+	 * 丢弃当前场景
+	 */
 	private static void disposeCurrentScene() {
 		CESoundEngine.refresh();
-		if(!currentScene.keepResourcePool()) {
+		if (!currentScene.keepResourcePool()) {
 			CEResourceHandler.freeResourcePool(currentScene);
 		}
 		currentScene.onSwitchedScene();
 		currentScene = null;
 	}
 
+	/**
+	 * 加载场景
+	 */
 	private static void loadScene(Scene sc) {
 		ResourcePool rp = CEResourceHandler.allocatePool(sc);
 		currentScene = sc;
 		CEDebugger.fine("Loading scene " + sc);
-		if(rp != null) {
+		if (rp != null) {
 			sc.preloadResources(rp);
 		}
 		CEDebugger.fine("Loading scene " + sc + " finished");
 	}
-
-	public static float getAspectRatio() {
-		return aspectRatio;
+	
+	/**
+	 * 收尾，退出！
+	 */
+	private static void cleanup() {
+		CESoundEngine.cleanup();
+		Display.destroy();
 	}
 
+
+	/**
+	 * 设置宽高比
+	 * @param aspectRatio
+	 */
 	private static void setAspectRatio(float aspectRatio) {
 		CEDebugger.fine("Screen Aspect Ratio updated to " + aspectRatio);
 		CritEngine.aspectRatio = aspectRatio;
+	}
+	
+	/**
+	 * 加载GL属性
+	 */
+	private static void initGLProps() {
+		GL11.glMatrixMode(GL11.GL_PROJECTION);
+		GL11.glLoadIdentity();
+		GL11.glOrtho(0.0, Display.getWidth(), 0.0, Display.getHeight(), 1, -1);
+		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glDepthFunc(GL11.GL_ALWAYS);
 	}
 }

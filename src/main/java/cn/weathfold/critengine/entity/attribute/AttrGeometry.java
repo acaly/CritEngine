@@ -6,8 +6,8 @@ package cn.weathfold.critengine.entity.attribute;
 import cn.weathfold.critengine.util.Rect;
 
 /**
+ * 实体的几何位置属性
  * @author WeAthFolD
- *
  */
 public class AttrGeometry extends Rect implements Attribute {
 

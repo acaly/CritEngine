@@ -5,7 +5,7 @@ package cn.weathfold.critengine.entity.attribute;
  * @author WeAthFolD
  */
 public interface Attribute {
-	
+
 	public String getAttributeID();
-	
+
 }

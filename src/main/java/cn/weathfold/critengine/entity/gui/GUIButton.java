@@ -10,38 +10,41 @@ import cn.weathfold.critengine.scene.Scene;
  * @author WeAthFolD
  */
 public abstract class GUIButton extends GUIComponent {
-	
+
 	private boolean hasPressed = false;
 
-	public GUIButton(Scene scene, double x, double y, double width, double height) {
+	public GUIButton(Scene scene, double x, double y, double width,
+			double height) {
 		super(scene, x, y, width, height);
 		this.guiListener.addKeyListening(-100);
 	}
-	
+
 	public abstract void onButtonPressed();
+
 	public abstract void onButtonFrame();
+
 	public abstract void onButtonReleased();
-	
+
 	@Override
 	protected void onKeyDown(int kid) {
-		if(!isMouseInEntity())
+		if (!isMouseInEntity())
 			return;
 		hasPressed = true;
 		onButtonPressed();
 	}
-	
+
 	@Override
 	protected final void onKeyFrame(int kid) {
-		if(!isMouseInEntity())
+		if (!isMouseInEntity())
 			return;
 		onButtonFrame();
 	}
-	
+
 	@Override
 	protected final void onKeyUp(int kid) {
-		if(!isMouseInEntity())
+		if (!isMouseInEntity())
 			return;
-		if(hasPressed)
+		if (hasPressed)
 			onButtonReleased();
 		hasPressed = false;
 	}

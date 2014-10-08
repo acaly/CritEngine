@@ -21,138 +21,135 @@ import cn.weathfold.critengine.util.Vector2d;
  * @author WeAthFolD
  */
 public class CollisionHandler implements IEntityProcessor {
-	
+
 	private static class CollidableEntityFilter implements IEntityFilter {
 
 		@Override
 		public boolean isEntityApplicable(Entity ent) {
 			return ent.hasAttribute("collider");
 		}
-		
+
 	}
-	
+
 	private static IEntityFilter filter = new CollidableEntityFilter();
 
 	@Override
 	public void processEntity(Entity e) {
-		if(!filter.isEntityApplicable(e)) {
+		if (!filter.isEntityApplicable(e)) {
 			return;
 		}
 		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
-		if(!collider.doesMove)
+		if (!collider.doesMove)
 			return;
-		
-		Set<Entity> set = e.sceneObj.getEntitiesWithin(e.getGeomProps(), filter, e);
-		if(set.isEmpty()) {
+
+		Set<Entity> set = e.sceneObj.getEntitiesWithin(e.getGeomProps(),
+				filter, e);
+		if (set.isEmpty()) {
 			return;
 		}
-		
-		//System.out.println(set);
-		//System.out.println(e.getGeomProps().getMinX() + ", " + e.getGeomProps().getMinY());
+
+		// System.out.println(set);
+		// System.out.println(e.getGeomProps().getMinX() + ", " +
+		// e.getGeomProps().getMinY());
 		Iterator<Entity> iter = set.iterator();
 		Entity ce = set.iterator().next();
-		if(!collider.onCollided(new RayTraceResult(EnumEdgeSide.NONE, ce, ce.getGeomProps().pos)))
-			return;
 		
+
 		Rect rect = new Rect(iter.next().getGeomProps());
-		//比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
-		while(iter.hasNext()) {
+		// 比较鬼畜的算法，当然一般只会碰撞到一个实体所以问题不会太大……吧……
+		while (iter.hasNext()) {
 			Rect r2 = iter.next().getGeomProps();
 			rect.expand(r2);
 		}
-		EnumEdgeSide side = alignEntity(e, rect);
-		
-		//反弹
-		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");
-		if(attrVel == null || !attrVel.onVelocityChange(ce))
+		EnumEdgeSide side = alignEntity(e, rect, true);
+		if (!collider.onCollided(new RayTraceResult(side, ce, ce.getGeomProps().getPos())))
 			return;
-		if(side.dirX != 0)
-			attrVel.vel.x = Math.abs(attrVel.vel.x) * side.dirX * collider.attnRate;
-		if(side.dirY != 0)
-			attrVel.vel.y = Math.abs(attrVel.vel.y) * side.dirY * collider.attnRate;
+		alignEntity(e, rect, side);
+		
+		// 反弹
+		AttrVelocity attrVel = (AttrVelocity) e.getAttribute("velocity");
+		if (attrVel == null || !attrVel.onVelocityChange(ce))
+			return;
+		if (side.dirX != 0)
+			attrVel.vel.x = Math.abs(attrVel.vel.x) * side.dirX
+					* collider.attnRate;
+		if (side.dirY != 0)
+			attrVel.vel.y = Math.abs(attrVel.vel.y) * side.dirY
+					* collider.attnRate;
 	}
-	
-	private int sgn(double x) {
-		return x > 0 ? 1 : x == 0 ? 0 : -1;
-	}
-	
+
 	public void handlesVelUpdate(Entity e, AttrGeometry pre, Vector2d after) {
+		//TODO 现在是以实体左下角进行的检查，如果正交矩形应该需要考虑另外几个判定点。
 		AttrVelocity vel = (AttrVelocity) e.getAttribute("velocity");
 		AttrCollider collider = (AttrCollider) e.getAttribute("collider");
-		if(!collider.doesMove)
+		if (!collider.doesMove)
 			return;
+		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.getPos(),after, filter, e);
 		
-		double offsetX = pre.width,
-			   offsetY = pre.height;	
-		//pre.pos.addVector(offsetX, offsetY);
-		//after.addVector(offsetX, offsetY);
-		
-		RayTraceResult res = CEPhysicEngine.rayTrace(e.sceneObj, pre.pos, after, filter, e);
-		
-		//pre.pos.addVector(-offsetX, -offsetY);
-		//after.addVector(-offsetX, -offsetY);
-		
-		//System.out.println(res.collided);
-		if(!res.collided) {
-			pre.pos = after;
+		if (!res.collided) {
+			pre.getPos().x = after.x;
+			pre.getPos().y = after.y;
 			return;
 		}
-		//System.out.println(res.edge);
-		if(!collider.onCollided(res) || !vel.onVelocityChange(res.collidedEntity))
-			return;
-		//愉快的反弹
-		if(res.edge.dirX != 0)
-			vel.vel.x = Math.abs(vel.vel.x) * res.edge.dirX * collider.attnRate;
-		if(res.edge.dirY != 0)
-			vel.vel.y = Math.abs(vel.vel.y) * res.edge.dirY * collider.attnRate;
 		
-		//System.out.println(e + " CH " + res.edge + " " + res.collidedEntity);
+		if (!collider.onCollided(res)
+				|| !vel.onVelocityChange(res.collidedEntity))
+			return;
+		
+		// 愉快的反弹
+		if (res.edge.dirX != 0)
+			vel.vel.x = Math.abs(vel.vel.x) * res.edge.dirX * collider.attnRate;
+		if (res.edge.dirY != 0)
+			vel.vel.y = Math.abs(vel.vel.y) * res.edge.dirY * collider.attnRate;
+
 		alignEntity(e, res.collidedEntity.getGeomProps(), res.edge);
 	}
-	
+
 	/**
 	 * 将实体就近对齐到某个区域旁边
 	 **/
-	private EnumEdgeSide alignEntity(Entity targ, Rect bound) {
-		AttrGeometry 
-			geo0 = targ.getGeomProps();
-		
+	private EnumEdgeSide alignEntity(Entity targ, Rect bound, boolean virtual) {
+		AttrGeometry geo0 = targ.getGeomProps();
+
 		double min = Double.MAX_VALUE;
-		
+
 		Vector2d res = null;
 		EnumEdgeSide res2 = EnumEdgeSide.NONE;
-		//EnumEdgeSide rSide = null;
-		for(EnumEdgeSide side : EnumEdgeSide.values()) {
-			if(side == EnumEdgeSide.NONE)
+		// EnumEdgeSide rSide = null;
+		for (EnumEdgeSide side : EnumEdgeSide.values()) {
+			if (side == EnumEdgeSide.NONE)
 				continue;
 			Vector2d vec = virtualAlign(targ, bound, side);
-			double dist = Math.abs(vec.x - geo0.pos.x) + Math.abs(vec.y - geo0.pos.y);
-			if(dist < min) {
+			double dist = Math.abs(vec.x - geo0.getMinX())
+					+ Math.abs(vec.y - geo0.getMinY());
+			if (dist < min) {
 				res = vec;
 				min = dist;
 				res2 = side;
-				//rSide = side;
+				// rSide = side;
 			}
 		}
-		//res.addVector(rSide.dirX * 0.001, rSide.dirY * 0.001);
-		geo0.pos = res;
+		// res.addVector(rSide.dirX * 0.001, rSide.dirY * 0.001);
+		if(!virtual)
+			geo0.setPos(res.x, res.y);
 		return res2;
 	}
-	
+
 	private void alignEntity(Entity targ, Rect bound, EnumEdgeSide side) {
 		AttrGeometry geom = targ.getGeomProps();
-		geom.pos = virtualAlign(targ, bound, side);
+		Vector2d pos = virtualAlign(targ, bound, side);
+		geom.setPos(pos.x, pos.y);
 	}
-	
+
 	private Vector2d virtualAlign(Entity targ, Rect bound, EnumEdgeSide side) {
 		AttrGeometry geom = targ.getGeomProps();
-		Vector2d res = geom.pos.copy();
-		switch(side) {
+		Vector2d res = geom.getPos().copy();
+		switch (side) {
 		case BOTTOM:
-			res.y = bound.getMinY() - geom.height;
+			res.y = bound.getMinY() - geom.getHeight();
 			break;
 		case LEFT:
-			res.x = bound.getMinX() - geom.width;
+			res.x = bound.getMinX() - geom.getWidth();
 			break;
 		case RIGHT:
 			res.x = bound.getMaxX();

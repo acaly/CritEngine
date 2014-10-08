@@ -8,45 +8,33 @@ import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.util.Rect;
 
 /**
+ * 键盘可以控制的摄像机（默认上下左右）
  * @author WeAthFolD
- *
  */
 public class KeyControlledCamera extends Camera {
-	
-	Directioner directioner = new Directioner();
-	float velFactorX = 1.0F, velFactorY;
 
-	/**
-	 * @param scene
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 * @param align
-	 */
+	Directioner directioner = new Directioner();
+	float velX = 1.0F, velY = 1.0F;
+
 	public KeyControlledCamera(Scene scene, double x, double y, double width,
 			double height, Alignment align) {
 		super(scene, x, y, width, height, align);
 	}
-	
+
 	/**
 	 * 设置x、y轴的移动速度(格/秒)
-	 * @param f1
-	 * @param f2
-	 * @return
 	 */
-	public KeyControlledCamera setVelFactor(float f1, float f2) {
-		velFactorX = f1;
-		velFactorY = f2;
+	public KeyControlledCamera setVelocity(float vx, float vy) {
+		velX = vx;
+		velY = vy;
 		return this;
 	}
-	
+
 	@Override
 	public void onFrameUpdate() {
 		directioner.frameUpdate();
 		Rect rt = this.getGeomProps();
-		rt.pos.x += velFactorX * directioner.dirHorizonal;
-		rt.pos.y += velFactorY * directioner.dirVertical;
+		rt.move(velX * directioner.dirHorizonal, velY * directioner.dirVertical);
 	}
 
 }

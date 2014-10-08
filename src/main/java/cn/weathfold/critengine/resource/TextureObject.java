@@ -10,14 +10,14 @@ import java.nio.ByteBuffer;
  * @author WeAthFolD
  */
 public interface TextureObject {
-	
+
 	/* 获取该贴图对应的Buffer */
 	ByteBuffer getBuffer();
-	
+
 	/* 获取贴图宽度 */
 	int getWidth();
-	
+
 	/* 获取贴图高度 */
 	int getHeight();
-	
+
 }
