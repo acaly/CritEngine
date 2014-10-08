@@ -91,7 +91,7 @@ public class SceneGameOver extends Scene {
 	@Override
 	public void preloadResources(ResourcePool pool) {
 		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH + "textures/over/main.png"), SceneGameOver.TEX_MAIN);
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH + "/textures/over/info.png"), SceneGameOver.TEX_INFO);
+		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH + "textures/over/info.png"), SceneGameOver.TEX_INFO);
 		CERenderEngine.preloadFont("Copperplate Gothic Bold");
 	}
 }
