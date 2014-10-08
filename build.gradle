@@ -93,6 +93,7 @@ run {
         systemProperty "java.library.path", "$buildDir/natives-linux"
     }
 }
+mainClassName = 'cn.weathfold.demo.Type24'
 
 // Setup tasks
 
