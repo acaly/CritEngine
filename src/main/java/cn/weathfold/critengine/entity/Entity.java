@@ -101,4 +101,12 @@ public class Entity {
 	public boolean hasAttribute(String id) {
 		return attributes.containsKey(id);
 	}
+	
+	public double getX() {
+		return getGeomProps().pos.x;
+	}
+	
+	public double getY() {
+		return getGeomProps().pos.y;
+	}
 }

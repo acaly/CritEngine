@@ -37,7 +37,7 @@ public class Rect {
 	/**
 	 * 判断一维线段[a, b], [c, d]是否有交集
 	 */
-	private boolean ins(double a, double b, double c, double d) {
+	public static boolean ins(double a, double b, double c, double d) {
 		//System.out.println(a + " " + b + " " + c + " " + d + ((c <= a && d > a) || (c < b)));
 		return d <= a ? false : (c < b);
 	}

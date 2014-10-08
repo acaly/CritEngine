@@ -83,6 +83,10 @@ public abstract class Scene {
 		return res;
 	}
 	
+	public boolean doesUpdate(Entity e) {
+		return mainCamera.getGeomProps().intersects(e.getGeomProps());
+	}
+	
 	public void spawnEntity(Entity e) {
 		if(e.sceneObj != this) {
 			throw new RuntimeException("Attempting to add an entity from another scene : " + e);

@@ -1,87 +1,97 @@
-/**
- * 
- */
 package cn.weathfold.critengine.resource;
 
+import cn.weathfold.critengine.CEDebugger;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
-
 import org.lwjgl.openal.AL10;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL30;
 
-import cn.weathfold.critengine.CEDebugger;
+public class ResourcePool
+{
+  Map<String, Integer> textureMap = new HashMap<String, Integer>();
+  Map<String, Integer> soundMap = new HashMap<String, Integer>();
 
-/**
- * @author WeAthFolD
- *
- */
-public class ResourcePool {
-	
-	Map<String, Integer> textureMap = new HashMap<String, Integer>();
-	Map<String, Integer> soundMap = new HashMap<String, Integer>();
-	
-	public void preloadSound(SoundObject obj, String key) {
-		int buf = AL10.alGenBuffers();
-		AL10.alBufferData(buf, obj.getFormat(), obj.getBuffer(), obj.getSamplerFreq());
-		soundMap.put(key, buf);
-	}
-	
-	public void free() {
-		//释放贴图
-		for(int i : textureMap.values()) {
-			GL11.glDeleteTextures(i);
-		}
-		
-		//释放声音
-		for(int i : soundMap.values()) {
-			AL10.alDeleteBuffers(i);
-		}
-	}
-	
-	public String[] preloadTextureArray(TextureObject obj[], String key) {
-		String[] keys = new String[obj.length];
-		for(int i = 0; i < obj.length; ++i) {
-			String k = key + i;
-			preloadTexture(obj[i], k);
-			keys[i] = k;
-		}
-		return keys;
-	}
-	
-	/* 加载一个特定的贴图资源，之后可以通过key来重新绑定它 */
-	public void preloadTexture(TextureObject obj, String key) {
-		int texID = GL11.glGenTextures();
-		//准备工作
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texID);
-		
-		GL11.glPixelStorei(GL11.GL_UNPACK_ALIGNMENT, 1);
-		
-		//上载贴图信息
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA,
-				obj.getWidth(), obj.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, obj.getBuffer());
-		GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
-		
-		//设置UV平铺方式
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+  public void preloadSound(SoundObject obj, String key) {
+    int buf = AL10.alGenBuffers();
+    try {
+      AL10.alBufferData(buf, obj.getFormat(), obj.getBuffer(), obj.getSamplerFreq());
+      this.soundMap.put(key, Integer.valueOf(buf));
+      CEDebugger.fine("Preloaded sound " + key);
+    } catch (Exception e) {
+      CEDebugger.error("An error occured when preloading sound " + key + ", stackTrace : ");
+      CEDebugger.error(e.toString());
+    }
+  }
 
-		//设置缩放参数
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
-		
-		CEDebugger.fine("Successfully preloaded texture " + key + ", size " + obj.getWidth() + "x" + obj.getHeight());
-		textureMap.put(key, texID);
-	}
-	
-	public int getTexture(String key) {
-		return textureMap.containsKey(key) ? textureMap.get(key) : 0;
-	}
-	
-	public int getSound(String key) {
-		return soundMap.containsKey(key) ? soundMap.get(key) : 0;
-	}
-	
+  public void free()
+  {
+    for (int i : textureMap.values()) {
+      GL11.glDeleteTextures(i);
+    }
+
+    for (int i : soundMap.values()) {
+      AL10.alDeleteBuffers(i); }
+  }
+
+  public String[] preloadTextureArray(TextureObject[] obj, String key)
+  {
+    String[] keys = new String[obj.length];
+    for (int i = 0; i < obj.length; i++) {
+      String k = key + i;
+      preloadTexture(obj[i], k);
+      keys[i] = k;
+    }
+    return keys;
+  }
+
+  public String[] preloadSoundArray(SoundObject[] obj, String key) {
+    String[] keys = new String[obj.length];
+    for (int i = 0; i < obj.length; i++) {
+      String k = key + i;
+      preloadSound(obj[i], k);
+      keys[i] = k;
+    }
+    return keys;
+  }
+
+  public void preloadTexture(TextureObject obj, String key)
+  {
+    try {
+      int texID = GL11.glGenTextures();
+
+      GL13.glActiveTexture(33984);
+      GL11.glBindTexture(3553, texID);
+
+      GL11.glPixelStorei(3317, 1);
+
+      GL11.glTexImage2D(3553, 0, 6408, 
+        obj.getWidth(), obj.getHeight(), 0, 6408, 5121, obj.getBuffer());
+      GL30.glGenerateMipmap(3553);
+
+      GL11.glTexParameteri(3553, 10242, 10497);
+      GL11.glTexParameteri(3553, 10243, 10497);
+
+      GL11.glTexParameteri(3553, 10240, 9728);
+      GL11.glTexParameteri(3553, 10241, 9987);
+
+      this.textureMap.put(key, Integer.valueOf(texID));
+
+      CEDebugger.fine("Preloaded texture " + key + ", size " + obj.getWidth() + "x" + obj.getHeight());
+    } catch (Exception e) {
+      CEDebugger.error("An error occured when preloading texture " + key + ", stackTrace : ");
+      CEDebugger.error(e.toString());
+    }
+  }
+
+  public int getTexture(String key) {
+    return this.textureMap.containsKey(key) ? ((Integer)this.textureMap.get(key)).intValue() : 0;
+  }
+
+  public int getSound(String key) {
+    return this.soundMap.containsKey(key) ? ((Integer)this.soundMap.get(key)).intValue() : 0;
+  }
 }

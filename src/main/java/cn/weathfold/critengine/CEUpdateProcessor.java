@@ -17,63 +17,68 @@ import cn.weathfold.critengine.physics.CEPhysicEngine;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.sound.CESoundEngine;
 
-/**
- * 消息循环的接管。
- * @author WeAthFolD
- */
-public class CEUpdateProcessor {
-	
-	private static Scene activeScene;
-	
-	private static Set<IEntityProcessor> entityProcessors = new HashSet<IEntityProcessor>();
-	protected static boolean tickState = true; //当前tick是否需要继续更新
-	
-	static {
-		entityProcessors.add(CEPhysicEngine.INSTANCE);
-	}
+public class CEUpdateProcessor
+{
+  private static Scene activeScene;
+  private static Set<IEntityProcessor> entityProcessors = new HashSet();
+  protected static boolean tickState = true;
 
-	public static void frameUpdate(Scene scene) {
-		activeScene = scene;
-		
-		CESoundEngine.frameUpdate();
-		
-		activeScene.frameUpdate();
-		if(!tickState) {
-			tickState = true;
-			return;
-		}
-		
-		List<Entity> list = activeScene.getSceneEntities();
-		for(int i = 0; i < list.size(); ++i) {
-			Entity e = list.get(i);
-			if(e.deathFlag) {
-				i--;
-				list.remove(e); //回收实体 TODO:在ArrayList中大量删除是低效的，如何解决？
-				continue;
-			}
-			
-			e.onFrameUpdate();
-			for(IEntityProcessor prc : entityProcessors) {
-				prc.processEntity(e);
-			}
-			if(!tickState) {
-				tickState = true;
-				return;
-			}
-		}
-		
-		drawCall();
-	}
-	
-	private static void drawCall() {
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		
-		GL11.glPushMatrix();
-		activeScene.renderBackground();
-		activeScene.renderForeground();
-		GL11.glPopMatrix();
-	}
-	
+  static {
+    entityProcessors.add(CEPhysicEngine.INSTANCE);
+  }
+
+  public static void frameUpdate(Scene scene) {
+    activeScene = scene;
+
+    CESoundEngine.frameUpdate();
+
+    activeScene.frameUpdate();
+    if (!tickState) {
+      tickState = true;
+      return;
+    }
+
+    List<Entity> list = activeScene.getSceneEntities();
+    manualUpdateEntities(list, activeScene);
+
+    drawCall();
+  }
+
+  public static void manualUpdateEntities(Scene scene) {
+    manualUpdateEntities(scene.getSceneEntities(), scene);
+  }
+
+  public static void manualUpdateEntities(List<Entity> list, Scene scene)
+  {
+    for (int i = 0; i < list.size(); i++) {
+      Entity e = (Entity)list.get(i);
+      if (scene.doesUpdate(e))
+      {
+        if (e.deathFlag) {
+          i--;
+          list.remove(e);
+        }
+        else
+        {
+          e.onFrameUpdate();
+          for (IEntityProcessor prc : entityProcessors) {
+            prc.processEntity(e);
+          }
+          if (!tickState) {
+            tickState = true;
+            return; } 
+        }
+      }
+    }
+  }
+
+  private static void drawCall() { GL11.glClear(16640);
+    GL13.glActiveTexture(33984);
+    GL11.glEnable(3553);
+
+    GL11.glPushMatrix();
+    activeScene.renderBackground();
+    activeScene.renderForeground();
+    GL11.glPopMatrix();
+  }
 }

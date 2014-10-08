@@ -1,46 +1,38 @@
-/**
- * 
- */
 package cn.weathfold.critengine.resource;
 
 import java.nio.ByteBuffer;
-
 import org.lwjgl.util.WaveData;
 
-/**
- * @author WeAthFolD
- *
- */
-public class WavSoundObject implements SoundObject {
-	
-	WaveData wave;
-	
-	public WavSoundObject(String path) {
-		wave = WaveData.create(this.getClass().getResource(path));
-	}
+public class WavSoundObject
+  implements SoundObject
+{
+  WaveData wave;
 
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.resource.SoundObject#getBuffer()
-	 */
-	@Override
-	public ByteBuffer getBuffer() {
-		return wave.data;
-	}
+  public WavSoundObject(String path)
+  {
+    this.wave = WaveData.create(getClass().getResource(path));
+  }
 
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.resource.SoundObject#getFormat()
-	 */
-	@Override
-	public int getFormat() {
-		return wave.format;
-	}
+  public ByteBuffer getBuffer()
+  {
+    return this.wave.data;
+  }
 
-	/* (non-Javadoc)
-	 * @see cn.weathfold.critengine.resource.SoundObject#getSamplerFreq()
-	 */
-	@Override
-	public int getSamplerFreq() {
-		return wave.samplerate;
-	}
+  public int getFormat()
+  {
+    return this.wave.format;
+  }
 
+  public int getSamplerFreq()
+  {
+    return this.wave.samplerate;
+  }
+
+  public static SoundObject[] readArray(String[] arr) {
+    SoundObject[] res = new SoundObject[arr.length];
+    for (int i = 0; i < arr.length; i++) {
+      res[i] = new WavSoundObject(arr[i]);
+    }
+    return res;
+  }
 }

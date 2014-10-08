@@ -1,11 +1,4 @@
-/**
- * 
- */
 package cn.weathfold.demo.menu;
-
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.camera.Camera;
@@ -19,115 +12,107 @@ import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.critengine.sound.CESoundEngine;
 import cn.weathfold.critengine.sound.SoundAttributes;
 import cn.weathfold.critengine.util.Rect;
-import cn.weathfold.demo.Type24;
+import java.util.List;
+import java.util.Random;
+import org.lwjgl.opengl.GL11;
 
-/**
- * @author WeAthFolD
- *
- */
-public class SceneMenu extends Scene {
-	
-	public static SceneMenu INSTANCE;
+public class SceneMenu extends Scene
+{
+  public static SceneMenu INSTANCE;
+  protected static final String SND_BACK = "BGM";
+  protected static final String TEX_ANIM = "back";
+  protected static final String TEX_START = "start0";
+  protected static final String TEX_START_ACTIVATED = "start1";
+  protected static final String TEX_QUIT = "quit0";
+  protected static final String TEX_QUIT_ACTIVATED = "quit1";
+  protected static final String TEX_TITLE = "title";
+  private String[] ANIM_MAIN;
+  private LoopAnimation backAnim;
+  private Random rand = new Random();
+  private boolean played = false;
+  private long lastPlayTick;
+  private static boolean firstLoad = true;
 
-	protected static final String SND_BACK = "BGM";
+  public SceneMenu() {
+    this.mainCamera = new Camera(this, -153.5D, 0.0D, 819.0D, 512.0D, 
+      Camera.Alignment.ALIGN_WIDTH);
+    this.elements.add(new EntityTitle(this));
+    this.elements.add(new ButtonStart(this));
+    this.elements.add(new ButtonExit(this));
+    if (INSTANCE == null)
+      INSTANCE = this;
+  }
 
-	protected static final String TEX_ANIM = "back", TEX_START = "start0",
-			TEX_START_ACTIVATED = "start1", TEX_QUIT = "quit0",
-			TEX_QUIT_ACTIVATED = "quit1", TEX_TITLE = "title";
+  public void frameUpdate()
+  {
+    if (CritEngine.getVirtualTime() - this.lastPlayTick > 92000L) {
+      this.played = false;
+    }
 
-	private String ANIM_MAIN[];
-	private LoopAnimation backAnim;
-	private Random rand = new Random();
-	private boolean played = false;
-	private long lastPlayTick;
-	private static boolean firstLoad = true;
+    if (!this.played) {
+      this.played = true;
+      CESoundEngine.playGlobalSound("BGM", new SoundAttributes(92000));
+      this.lastPlayTick = CritEngine.getVirtualTime();
+    }
+  }
 
-	public SceneMenu() {
-		this.mainCamera = new Camera(this, -153.5, 0, 819, 512,
-				Alignment.ALIGN_WIDTH); // 设置主摄像机
-		elements.add(new EntityTitle(this));
-		elements.add(new ButtonStart(this));
-		elements.add(new ButtonExit(this));
-		if(INSTANCE == null)
-			INSTANCE = this;
-	}
+  public void preloadResources(ResourcePool pool)
+  {
+    if (firstLoad)
+    {
+      CEResourceHandler.globalPreloadSound(new WavSoundObject(
+        "/assets/type24/sounds/buttonclick.wav"), 
+        "btnclick");
+      CEResourceHandler.globalPreloadSound(new WavSoundObject(
+        "/assets/type24/sounds/buttonclickrelease.wav"), 
+        "/assets/type24/btnrelease");
 
-	@Override
-	public void frameUpdate() {
-		// 循环播放BGM
-		if (CritEngine.getVirtualTime() - lastPlayTick > 92000) {
-			played = false;
-		}
+      firstLoad = false;
+    }
 
-		if (!played) {
-			played = true;
-			CESoundEngine.playGlobalSound(SND_BACK, new SoundAttributes(92000));
-			lastPlayTick = CritEngine.getVirtualTime();
-		}
-	}
+    String[] anim = new String[12];
+    for (int i = 0; i < 12; i++) {
+      anim[i] = ("/assets/type24/textures/menu/back" + i + ".png");
+    }
+    this.ANIM_MAIN = pool.preloadTextureArray(PNGTextureObject.readArray(anim), 
+      "back");
+    this.backAnim = new LoopAnimation(this.ANIM_MAIN)
+    {
+      protected int nextFrame()
+      {
+        return SceneMenu.this.rand.nextInt(12);
+      }
+    }
+    .setFrameInterval(300).setDrawingQuad(new Rect(153.5D, 0.0D, 512.0D, 512.0D));
 
-	@Override
-	public void preloadResources(ResourcePool pool) {
-		if (firstLoad) {
-			// preload
-			CEResourceHandler.globalPreloadSound(new WavSoundObject(
-					Type24.ASSETS_PATH + "sounds/buttonclick.wav"),
-					Type24.SND_BUTTON_CLICK);
-			CEResourceHandler.globalPreloadSound(new WavSoundObject(
-					Type24.ASSETS_PATH + "sounds/buttonclickrelease.wav"),
-					Type24.SND_BUTTON_RELEASE);
-			// end
-			firstLoad = false;
-		}
+    pool.preloadTexture(new PNGTextureObject("/assets/type24/textures/menu/exit.png"), 
+      "quit0");
+    pool.preloadTexture(new PNGTextureObject("/assets/type24/textures/menu/exit_activated.png"), 
+      "quit1");
+    pool.preloadTexture(new PNGTextureObject("/assets/type24/textures/menu/start.png"), 
+      "start0");
+    pool.preloadTexture(new PNGTextureObject("/assets/type24/textures/menu/start_activated.png"), 
+      "start1");
+    pool.preloadTexture(new PNGTextureObject("/assets/type24/textures/menu/title.png"), 
+      "title");
 
-		String anim[] = new String[12];
-		for (int i = 0; i < 12; ++i) {
-			anim[i] = Type24.ASSETS_PATH + "textures/menu/back" + i + ".png";
-		}
-		ANIM_MAIN = pool.preloadTextureArray(PNGTextureObject.readArray(anim),
-				TEX_ANIM);
-		backAnim = new LoopAnimation(ANIM_MAIN) {
-			{
-				this.setDrawingQuad(new Rect(Type24.QUAD_ALIGN, 0,
-						1 - 2 * Type24.QUAD_ALIGN, 1));
-			}
+    pool.preloadSound(new WavSoundObject("/assets/type24/sounds/menu/bgm.wav"), 
+      "BGM");
+  }
 
-			// 随机帧
-			@Override
-			protected int nextFrame() {
-				return rand.nextInt(12);
-			}
-		}.setFrameInterval(300).setDrawingQuad(new Rect(153.5, 0, 512, 512));
+  public void onSwitchedScene()
+  {
+    this.lastPlayTick = 0L;
+  }
 
-		// 加载菜单贴图
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH
-				+ "textures/menu/exit.png"), TEX_QUIT);
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH
-				+ "textures/menu/exit_activated.png"), TEX_QUIT_ACTIVATED);
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH
-				+ "textures/menu/start.png"), TEX_START);
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH
-				+ "textures/menu/start_activated.png"), TEX_START_ACTIVATED);
-		pool.preloadTexture(new PNGTextureObject(Type24.ASSETS_PATH
-				+ "textures/menu/title.png"), TEX_TITLE);
+  public boolean keepResourcePool()
+  {
+    return true;
+  }
 
-		pool.preloadSound(new WavSoundObject(Type24.ASSETS_PATH
-				+ "sounds/menu/bgm.wav"), SND_BACK);
-	}
-	
-	@Override
-	public void onSwitchedScene() {
-		lastPlayTick = 0;
-	}
-	
-	@Override
-	public boolean keepResourcePool() {
-		return true;
-	}
-
-	@Override
-	public void renderBackground() {
-		GL11.glColor4f(1F, 1F, 1F, 1F);
-		backAnim.draw();
-	}
+  public void renderBackground()
+  {
+    GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+    this.backAnim.draw();
+  }
 }

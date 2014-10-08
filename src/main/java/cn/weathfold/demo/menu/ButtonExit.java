@@ -1,46 +1,25 @@
-/**
- * 
- */
 package cn.weathfold.demo.menu;
 
 import cn.weathfold.critengine.CritEngine;
 import cn.weathfold.critengine.scene.Scene;
 import cn.weathfold.demo.T24Button;
 
-/**
- * @author WeAthFolD
- *
- */
-public class ButtonExit extends T24Button {
+public class ButtonExit extends T24Button
+{
+  private static final String NORMAL = "quit0";
+  private static final String ACTIVATED = "quit1";
 
-	private String 
-		NORMAL = SceneMenu.TEX_QUIT,
-		ACTIVATED = SceneMenu.TEX_QUIT_ACTIVATED;
-	
-	/**
-	 * @param scene
-	 * @param x
-	 * @param y
-	 * @param width
-	 * @param height
-	 */
-	public ButtonExit(Scene scene) {
-		super(scene, 10, 12, 220, 40);
-		this.setTexture(NORMAL);
-	}
-	
-	@Override
-	public void drawEntity() {
-		this.textureID = this.isMouseInEntity() ? ACTIVATED : NORMAL;
-		super.drawEntity();
-	}
+  public ButtonExit(Scene scene)
+  {
+    super(scene, 10.0D, 12.0D, 220.0D, 40.0D, "quit0", "quit1");
+    setTexture("quit0");
+  }
 
-	@Override
-	public void onButtonFrame() {}
+  public void onButtonFrame()
+  {
+  }
 
-	@Override
-	public void onButtonReleased() {
-		CritEngine.switchScene(null);
-	}
-
+  public void onButtonReleased() {
+    CritEngine.switchScene(null);
+  }
 }
